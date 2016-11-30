@@ -5,18 +5,22 @@ COPY entrypoint.sh entrypoint.sh
 RUN yum install -y wget && \
     wget https://archive.cloudera.com/cdh5/redhat/7/x86_64/cdh/cloudera-cdh5.repo?_ga=1.26965246.2135856916.1478605511 \
     -O /etc/yum.repos.d/cloudera.repo && \
-    yum clean all && \
-    yum install -y impala-shell hive hbase && \
-    spark-core spark-python && \
-    java-1.8.0-openjdk.x86_64 unzip && \
-    pip install ibis-framework && \
-    curl -L https://github.com/edenhill/librdkafka/archive/v0.9.2.zip | tar xzf - && \
-    cd librdkafka-0.9.2-RC1/ && \
+    wget http://archive.cloudera.com/beta/kudu/redhat/7/x86_64/kudu/cloudera-kudu.repo \
+    -O /etc/yum.repos.d/kudu.repo && \
+    yum install -y gcc gcc-c++ autoconf automake \
+    epel-release python-pip impala-shell hive hbase spark-core spark-python \
+    postgresql-devel python-devel java-1.8.0-openjdk.x86_64 unzip kudu-client-devel && \
+    wget https://github.com/edenhill/librdkafka/archive/v0.9.2.zip -O v0.9.2.zip && \
+    unzip v0.9.2.zip && \
+    cd librdkafka-0.9.2/ && \
     ./configure --prefix=/usr && \
     make -j && \
-    sudo make install && \
-    pip install "confluent-kafka[avro]"
-    chmod +x entrypoint.sh
+    make install && \
+    easy_install pip && \
+    easy_install -U setuptools && \
+    pip install ibis-framework && \
+    pip install "confluent-kafka[avro]" && \
+    chmod +x entrypoint.sh 
 
 ENV HADOOP_CONF_DIR=/etc/hadoop-conf/yarn-conf
 ENV HIVE_CONF_DIR=/etc/hive-conf

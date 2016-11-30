@@ -1,0 +1,17 @@
+sudo: required
+
+language: ruby
+
+services:
+    - docker
+
+before_install:
+    - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USER" -p="$DOCKER_PASS"
+    - docker build -t datamountaineer/hadoop-client hadoop-client
+    - docker build -t datamountaineer/compactor-hdfs ompactor-hdfs
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USER" -p="$DOCKER_PASS";
+    docker push datamountaineer/hadoop-client;
+    docker push datamountaineer/compactor-hdfs
