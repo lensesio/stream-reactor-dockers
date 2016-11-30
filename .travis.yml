@@ -8,7 +8,7 @@ services:
 before_install:
     - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USER" -p="$DOCKER_PASS"
     - docker build -t datamountaineer/hadoop-client hadoop-client
-    - docker build -t datamountaineer/compactor-hdfs ompactor-hdfs
+    - docker build -t datamountaineer/compactor-hdfs compactor-hdfs
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
