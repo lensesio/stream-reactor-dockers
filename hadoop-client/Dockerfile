@@ -16,13 +16,15 @@ RUN yum install -y wget && \
     ./configure --prefix=/usr && \
     make -j && \
     make install && \
-    easy_install pip && \
     easy_install -U setuptools && \
+    easy_install pip && \
     pip install ibis-framework && \
     pip install "confluent-kafka[avro]" && \
+    wget http://packages.confluent.io/archive/3.0.1/confluent-3.0.1-2.11.tar.gz -O /etc/confluent/ && \
+    cd .. && \
     chmod +x entrypoint.sh 
 
-ENV HADOOP_CONF_DIR=/etc/hadoop-conf/yarn-conf
+ENV HADOOP_CONF_DIR=/etc/yarn-conf
 ENV HIVE_CONF_DIR=/etc/hive-conf
 
 CMD ["./entrypoint.sh"]
