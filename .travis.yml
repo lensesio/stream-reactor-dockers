@@ -8,6 +8,5 @@ language: bash
 before_install:
   - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS" 
 
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    ./build.sh
+script:
+  ./build.sh
