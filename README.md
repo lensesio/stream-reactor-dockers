@@ -27,4 +27,4 @@ docker run \
     -e CONNECTOR_CONNECT_CASSANDRA_USERNAME="cassandra" \
     -e CONNECTOR_CONNECT_CASSANDRA_PASSWORD="cassandra" \
     --name datamountaineer\kafka-connect-cassandra:LATEST
-    ```
+```
