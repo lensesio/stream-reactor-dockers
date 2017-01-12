@@ -2,6 +2,8 @@ sudo: required
 
 services:
   - docker
+  
+language: bash  
 
 before_install:
   - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS" 
