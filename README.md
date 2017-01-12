@@ -14,7 +14,7 @@ the enviroment variables.
 For an awesome deployment app to deploy your landscape checkout Eneco's [Landscaper](https://github.com/Eneco/landscaper).
 
 For example:
-
+```bash
 docker run \
     -e CONNECTOR_CONNECTOR_CLASS="com.datamountaineer.streamreactor.connect.cassandra.sink.CassandraSinkConnector" \
     -e CONNECTOR_NAME="cassandra-sink-orders" \
@@ -27,3 +27,4 @@ docker run \
     -e CONNECTOR_CONNECT_CASSANDRA_USERNAME="cassandra" \
     -e CONNECTOR_CONNECT_CASSANDRA_PASSWORD="cassandra" \
     --name datamountaineer\kafka-connect-cassandra:LATEST
+    ```
