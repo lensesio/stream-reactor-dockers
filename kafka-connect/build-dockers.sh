@@ -20,7 +20,7 @@ do
         -t datamountaineer/kafka-connect-${STREAM_REACTOR_COMPONENT}:${STREAM_REACTOR_VERSION} \
         -t datamountaineer/kafka-connect-${STREAM_REACTOR_COMPONENT} \
         -f Dockerfile .
-        docker push datamountaineer/${STREAM_REACTOR_COMPONENT}:${STREAM_REACTOR_VERSION}
+        docker push datamountaineer/kafka-connect-${STREAM_REACTOR_COMPONENT}:${STREAM_REACTOR_VERSION}
         docker push datamountaineer/kafka-connect-${STREAM_REACTOR_COMPONENT}
 done < "$input"
 
