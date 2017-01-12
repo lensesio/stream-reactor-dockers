@@ -7,6 +7,6 @@ before_install:
 	- docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USER" -p="$DOCKER_PASS"
 	- docker build -t datamountaineer/$STREAM_REACTOR_COMPONENT:$STREAM_REACTOR_VERSION -t datamountaineer/$STREAM_REACTOR_COMPONENT:$STREAM_REACTOR_VERSION -f $STREAM_REACTOR_COMPONENT/Dockerfile . 
 
-script:
+after_success:
 	- if [ "$TRAVIS_BRANCH" == "master" ]; then
-		build.sh
+    		buid.sh
