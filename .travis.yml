@@ -5,10 +5,8 @@ services:
   
 language: bash  
 
-before_install:
-  - docker login -u="$DOCKER_USER" -p="$DOCKER_PASS" 
-
 script:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    ./build.sh
+    docker login -u="$DOCKER_USER" -p="$DOCKER_PASS";
+    ./build.sh;
     fi
