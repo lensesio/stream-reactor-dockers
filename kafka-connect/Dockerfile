@@ -1,4 +1,4 @@
-FROM eneco/connector-base:0.1.0
+FROM eneco/connector-base:0.2.0
 
 ARG STREAM_REACTOR_VERSION
 ARG STREAM_REACTOR_COMPONENT
