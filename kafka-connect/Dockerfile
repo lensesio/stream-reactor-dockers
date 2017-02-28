@@ -1,4 +1,4 @@
-FROM eneco/connector-base:0.2.0
+FROM onfluentinc/cp-kafka-connect:3.1.1
 
 ARG STREAM_REACTOR_VERSION
 ARG STREAM_REACTOR_COMPONENT
@@ -6,6 +6,21 @@ ARG CONFLUENT_VERSION
 ARG DIR
 ENV STREAM_REACTOR_VERSION ${STREAM_REACTOR_VERSION}
 ENV STREAM_REACTOR_COMPONENT ${STREAM_REACTOR_COMPONENT}
+
+#
+# Liveliness probe
+#
+RUN apt-get update && apt-get install jq
+COPY liveliness.sh /etc/confluent/liveliness.sh
+#
+# jmx exporter
+#
+COPY config.yaml /etc/jmx_exporter/config.yaml
+RUN mkdir -p /opt/jmx_exporter && \
+    wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.7/jmx_prometheus_javaagent-0.7.jar -O \
+    /opt/jmx_exporter/jmx_prometheus_javaagent-0.7.jar
+ENV KAFKA_JMX_OPTS="-javaagent:/opt/jmx_exporter/jmx_prometheus_javaagent-0.7.jar=9102:/etc/jmx_exporter/config.yaml"
+EXPOSE 9102
 
 RUN cd /etc/${COMPONENT}/jars && \
     wget https://github.com/datamountaineer/stream-reactor/releases/download/v${STREAM_REACTOR_VERSION}/kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz && \
