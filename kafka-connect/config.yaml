@@ -1,0 +1,25 @@
+lowercaseOutputName: true
+attrNameSnakeCase: true
+rules:
+  # kafka.producer:type=producer-topic-metrics,client-id=([-.w]+),topic=([-.w]+)
+  # kafka.consumer:type=consumer-fetch-manager-metrics,client-id=([-.w]+),topic=([-.w]+)
+  - pattern: "kafka.(\\w+)<type=(.+), client-id=(.+), topic=(.+)><>(.+):"
+    name: $2_$5
+    labels:
+      client_id: "$3"
+      topic: "$4"
+  # kafka.producer:type=producer-node-metrics,client-id=([-.w]+),node-id=([0-9]+)
+  # kafka.consumer:type=consumer-node-metrics,client-id=([-.w]+),node-id=([0-9]+)
+  - pattern: "kafka.(\\w+)<type=(.+), client-id=(.+), node-id=(.+)><>(.+):"
+    name: $2_$5
+    labels:
+      client_id: "$3"
+      node_id: "$4"
+  # kafka.producer:type=producer-metrics,client-id=([-.w]+)
+  # kafka.consumer:type=consumer-metrics,client-id=([-.w]+)
+  # kafka.consumer:type=consumer-fetch-manager-metrics,client-id=([-.w]+)
+  # kafka.consumer:type=consumer-coordinator-metrics,client-id=([-.w]+)
+  - pattern: "kafka.(\\w+)<type=(.+), client-id=(.+)><>(.+):"
+    name: $2_$4
+    labels:
+      client_id: "$3"
