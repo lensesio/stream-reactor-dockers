@@ -2,7 +2,7 @@
 
 ##./mover.sh | grep hadoop > mover.log
 
-TABLES=sys_twitter_rage_raw,sys_trayport_contracts_proc,sys_trayport_products_proc,sys_trayport_raw_normalised_proc,sys_ebase_power_raw,sys_ebase_power_upscaled_proc,sys_ebase_power_validated_proc,sys_reuters_raw,sys_trayport_trades_proc,sys_twitter_rage_tweets_proc,sys_twitter_rage_users_proc
+TABLES=
 
 COUNTER=50
 

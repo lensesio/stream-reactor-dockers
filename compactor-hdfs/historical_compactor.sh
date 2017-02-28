@@ -4,8 +4,8 @@ export OFFSET=1
 export IMPALA=localhost
 export SOURCE_DATABASE=default
 export COMPACTION_LOCATION=/data/compaction
-export USE_HIVE=sys_twitter_rage_raw,sys_trayport_contracts_proc,sys_trayport_products_proc,sys_trayport_raw_normalised_proc
-export USE_IMPALA=sys_ebase_power_raw,sys_ebase_power_upscaled_proc,sys_ebase_power_validated_proc,sys_reuters_raw,sys_trayport_trades_proc,sys_twitter_rage_tweets_proc,sys_twitter_rage_users_proc
+export USE_HIVE=
+export USE_IMPALA=
 
 #Get the current day and adjust for the offset
 DAY=$(date +"%d" -d "-${OFFSET} day")
