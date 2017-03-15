@@ -1,4 +1,4 @@
-FROM confluentinc/cp-kafka-connect:3.1.1
+FROM confluentinc/cp-kafka-connect:3.0.1
 
 ARG STREAM_REACTOR_VERSION
 ARG STREAM_REACTOR_COMPONENT
