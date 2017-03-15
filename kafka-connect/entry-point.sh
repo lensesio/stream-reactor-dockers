@@ -12,7 +12,7 @@ function push_config {
     echo "done."
 }
 APP_PROPERTIES_FILE=/etc/config/connector.properties
-CLI_JAR=/etc/${COMPONENT}/jars/kafka-connect-0.9-all.jar
+CLI_JAR=/etc/${COMPONENT}/jars/kafka-connect-1.0-all.jar
 export CLASSPATH=/etc/${COMPONENT}/jars/kafka-connect-3.0.1-0.2.3-all.jar
 
 # cli expects this env var
