@@ -25,7 +25,8 @@ EXPOSE 9102
 RUN cd /etc/${COMPONENT}/jars && \
     wget https://github.com/datamountaineer/stream-reactor/releases/download/v${STREAM_REACTOR_VERSION}/kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz && \
     tar -xvf kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz -C . && \
-    rm -f -r kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz
+    rm -f -r kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz && \
+    wget https://github.com/datamountaineer/kafka-connect-tools/releases/download/v1.0/kafka-connect-cli-1.0-all.jar
 COPY entry-point.sh /etc/confluent/entry-point.sh
 COPY templates/connector.properties.template /etc/confluent/docker/connector.properties.template
 RUN apt-get update && apt-get install unzip
