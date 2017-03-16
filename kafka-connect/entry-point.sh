@@ -13,7 +13,7 @@ function push_config {
 }
 APP_PROPERTIES_FILE=/etc/config/connector.properties
 CLI_JAR=/etc/${COMPONENT}/jars/kafka-connect-cli-1.0-all.jar
-export CLASSPATH=/etc/${COMPONENT}/jars/kafka-connect-3.1.1-0.2.4-all.jar
+export CLASSPATH=/etc/${COMPONENT}/jars/kafka-connect-3.0.1-0.2.3-all.jar
 
 # cli expects this env var
 export KAFKA_CONNECT_REST="http://127.0.0.1:$CONNECT_REST_PORT"
