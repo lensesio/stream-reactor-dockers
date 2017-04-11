@@ -1,4 +1,4 @@
-FROM confluentinc/cp-kafka-connect:3.0.1
+FROM confluentinc/cp-kafka-connect:3.2.0
 
 ARG STREAM_REACTOR_VERSION
 ARG STREAM_REACTOR_COMPONENT
@@ -28,6 +28,9 @@ RUN cd /etc/${COMPONENT}/jars && \
     rm -f -r kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz && \
     wget https://github.com/datamountaineer/kafka-connect-tools/releases/download/v1.0/kafka-connect-cli-1.0-all.jar
 COPY entry-point.sh /etc/confluent/entry-point.sh
+RUN sed -i "s/<STREAM_REACTOR_COMPONENT>/${STREAM_REACTOR_COMPONENT}/g" /etc/confluent/entry-point.sh
+RUN sed -i "s/<STREAM_REACTOR_VERSION>/${STREAM_REACTOR_VERSION}/g" /etc/confluent/entry-point.sh
+RUN sed -i "s/<CONFLUENT_VERSION>/${CONFLUENT_VERSION}/g" /etc/confluent/entry-point.sh
 COPY templates/connector.properties.template /etc/confluent/docker/connector.properties.template
 RUN apt-get update && apt-get install unzip
 RUN chmod +x /etc/confluent/entry-point.sh
