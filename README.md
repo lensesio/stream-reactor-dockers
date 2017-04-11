@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/datamountaineer/dockers.svg?branch=master)](https://travis-ci.org/datamountaineer/dockers)
-
 # DataMountaineer Dockers
 
 The images are based of Eneco's base image which in turn in base of Confluents Kafka Connect image, however the Eneco
