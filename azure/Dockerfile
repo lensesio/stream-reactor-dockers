@@ -23,4 +23,5 @@ RUN apt-get update && apt-get install -y libssl-dev libffi-dev python-dev build-
     chmod +x /usr/local/bin/dumb-init && \
     wget https://github.com/Landoop/coyote/releases/download/v1.1/coyote-1.1-linux-amd64 && \
     mv coyote-1.1-linux-amd64 coyote && \
-    mv coyote /usr/local/bin
+    mv coyote /usr/local/bin && \
+    chmod +x /usr/local/bin/coyote

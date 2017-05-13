@@ -17,6 +17,7 @@ do
         --build-arg STREAM_REACTOR_VERSION=${STREAM_REACTOR_VERSION} \
         --build-arg CONFLUENT_VERSION=${CONFLUENT_VERSION} \
         --build-arg CONFLUENT_VERSION=${CONFLUENT_VERSION} \
+        --build-arg COMPONENT=${COMPONENT} \
         -t datamountaineer/kafka-connect-${STREAM_REACTOR_COMPONENT}:${STREAM_REACTOR_VERSION} \
         -t datamountaineer/kafka-connect-${STREAM_REACTOR_COMPONENT} \
         -f Dockerfile .
