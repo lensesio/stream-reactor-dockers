@@ -13,7 +13,6 @@ function push_config {
 }
 APP_PROPERTIES_FILE=/etc/config/connector.properties
 CLI_JAR=/etc/datamountaineer/jars/kafka-connect-cli-1.0-all.jar
-export CLASSPATH=/etc/datamountaineer/jars/kafka-connect-<STREAM_REACTOR_COMPONENT>-<STREAM_REACTOR_VERSION>-<CONFLUENT_VERSION>-all.jar
 
 # cli expects this env var
 export KAFKA_CONNECT_REST="http://$CONNECT_REST_ADVERTISED_HOST_NAME:$CONNECT_REST_PORT"
