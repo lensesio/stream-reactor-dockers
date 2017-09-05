@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-STREAM_REACTOR_VERSION="0.2.5"
-CONFLUENT_VERSION="3.2.0"
+STREAM_REACTOR_VERSION="0.3.0"
+CONFLUENT_VERSION="3.3.0"
 COMPONENT="kafka-connect"
 export STREAM_REACTOR_VERSION
 export CONFLUENT_VERSION
