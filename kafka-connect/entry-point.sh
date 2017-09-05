@@ -5,19 +5,20 @@ function push_config {
     until $CLI_CMD ps >>/dev/null
     do
         echo "Waiting for connect's rest API at $KAFKA_CONNECT_REST"
-        sleep 1
+        sleep 10
     done
     echo "Pushing connector config..."
+    sleep 5
+    # cat $APP_PROPERTIES_FILE
     $CLI_CMD run $CONNECTOR_NAME < $APP_PROPERTIES_FILE
     echo "done."
 }
 APP_PROPERTIES_FILE=/etc/config/connector.properties
-CLI_JAR=/etc/datamountaineer/jars/kafka-connect-cli-1.0-all.jar
-export CLASSPATH=/etc/datamountaineer/jars/kafka-connect-<STREAM_REACTOR_COMPONENT>-<STREAM_REACTOR_VERSION>-<CONFLUENT_VERSION>-all.jar
+CLI=/etc/datamountaineer/bin/connect-cli
 
 # cli expects this env var
 export KAFKA_CONNECT_REST="http://$CONNECT_REST_ADVERTISED_HOST_NAME:$CONNECT_REST_PORT"
-CLI_CMD="java -jar $CLI_JAR"
+CLI_CMD="$CLI"
 # Create
 echo "Creating connector properties file"
 mkdir /etc/config

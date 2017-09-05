@@ -28,8 +28,7 @@ RUN mkdir -p /etc/datamountaineer/jars && \
     chmod +x /usr/local/bin/dumb-init && \
     apt-get install -y libmysql-java && \
     cp /usr/share/java/mysql-connector-java.jar /etc/datamountaineer/jars && \
-    wget https://github.com/datamountaineer/kafka-connect-jdbc/releases/download/v3.2.0/kafka-connect-jdbc-3.2.0.jar && \
-    rm -f /usr/share/java/kafka-connect-jdbc/kafka-connect-jdbc-3.2.0.jar && \
-    cp kafka-connect-jdbc-3.2.0.jar /usr/share/java/kafka-connect-jdbc/kafka-connect-jdbc-3.2.0.jar
+    wget http://central.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/6.1.0.jre8/mssql-jdbc-6.1.0.jre8.jar && \
+    cp mssql-jdbc-6.1.0.jre8.jar /etc/datamountaineer/jars
 
 CMD ["dumb-init", "/etc/confluent/entry-point.sh"]

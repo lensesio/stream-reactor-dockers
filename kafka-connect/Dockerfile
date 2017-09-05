@@ -30,9 +30,10 @@ ENV KAFKA_JMX_OPTS="-javaagent:/opt/jmx_exporter/jmx_prometheus_javaagent-0.7.ja
 EXPOSE 9102
 
 RUN mkdir -p /etc/datamountaineer/jars && \
+    mkdir -p /etc/datamountaineer/bin && \
     wget https://github.com/datamountaineer/stream-reactor/releases/download/v${STREAM_REACTOR_VERSION}/kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz && \
     tar -xvf kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz -C . && \
-    wget https://github.com/datamountaineer/kafka-connect-tools/releases/download/v1.0/kafka-connect-cli-1.0-all.jar && \
+    wget https://github.com/datamountaineer/kafka-connect-tools/releases/download/v1.0.2/connect-cli && \
     sed -i "s/<STREAM_REACTOR_COMPONENT>/$STREAM_REACTOR_COMPONENT/g" /etc/confluent/entry-point.sh && \
     sed -i "s/<STREAM_REACTOR_VERSION>/$STREAM_REACTOR_VERSION/g" /etc/confluent/entry-point.sh && \
     sed -i "s/<CONFLUENT_VERSION>/$CONFLUENT_VERSION/g" /etc/confluent/entry-point.sh && \
@@ -40,6 +41,7 @@ RUN mkdir -p /etc/datamountaineer/jars && \
     wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 && \
     chmod +x /usr/local/bin/dumb-init && \
     mv kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.jar /etc/datamountaineer/jars && \
-    mv kafka-connect-cli-1.0-all.jar /etc/datamountaineer/jars
+    mv connect-cli /etc/datamountaineer/bin && \
+    chmod +x  /etc/datamountaineer/bin/connect-cli
 
 CMD ["dumb-init", "/etc/confluent/entry-point.sh"]
