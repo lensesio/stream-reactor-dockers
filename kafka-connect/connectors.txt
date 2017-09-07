@@ -5,6 +5,7 @@ cassandra
 coap
 druid
 elastic
+elastic5
 hazelcast
 hbase
 influxdb

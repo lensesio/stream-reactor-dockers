@@ -24,6 +24,8 @@ echo "Creating connector properties file"
 mkdir /etc/config
 dub template "/etc/confluent/docker/connector.properties.template" "$APP_PROPERTIES_FILE"
 push_config &
+
+export CONNECT_PLUGIN_PATH=/etc/datamountaineer/jars
 # start connect using dumb-init to handle signals
 exec /etc/confluent/docker/run
 # EOF
