@@ -1,4 +1,4 @@
-FROM confluentinc/cp-kafka-connect:3.2.0
+FROM confluentinc/cp-kafka-connect:3.3.0
 
 ARG STREAM_REACTOR_VERSION
 ARG STREAM_REACTOR_COMPONENT
@@ -31,7 +31,7 @@ EXPOSE 9102
 
 RUN mkdir -p /etc/datamountaineer/jars && \
     mkdir -p /etc/datamountaineer/bin && \
-    wget https://github.com/datamountaineer/stream-reactor/releases/download/v${STREAM_REACTOR_VERSION}/kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz && \
+    wget https://github.com/datamountaineer/stream-reactor/releases/download/${STREAM_REACTOR_VERSION}/kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz && \
     tar -xvf kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${CONFLUENT_VERSION}-all.tar.gz -C . && \
     wget https://github.com/datamountaineer/kafka-connect-tools/releases/download/v1.0.2/connect-cli && \
     sed -i "s/<STREAM_REACTOR_COMPONENT>/$STREAM_REACTOR_COMPONENT/g" /etc/confluent/entry-point.sh && \
