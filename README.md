@@ -1,15 +1,10 @@
 # DataMountaineer Dockers
 
-The images are based of Eneco's base image which in turn in base of Confluents Kafka Connect image, however the Eneco
-image contains liveliness checks on the Connect worker running withn the Docker, this is meant for Kubernetes.
-
-These images use Confluents docker utility belt to take all enviroment variables prefixed with `CONNECTOR` to create a
+These images use Confluent's docker utility belt to take all environment variables prefixed with `CONNECTOR` to create a
 connector properties file. Environment variables beginning with `CONNECT` are used to create the properties file for the Kafka Connect 
-Cluster. The Connector properties file is then pushed via DataMountaineers Connect [CLI](https://github.com/datamountaineer/kafka-connect-tools) to the Connect workers API once it's up to start the connector.
+Cluster. The Connector properties file is then pushed via DataMountaineers Connect [CLI](https://github.com/landoop/kafka-connect-tools) to the Connect workers API once it's up to start the connector.
 
-The expected usecase is that the Connect Worker joins with other pods deployed via [Helm](https://helm.sh/) to form a 
-Connect Cluster for a specific instance of one connector only. It can only post in a configuration for one type based on 
-the enviroment variables.
+The expected usecase is that the Connect Worker joins with other pods deployed via [Helm](https://helm.sh/) to form a Connect Cluster for a specific instance of one connector only. It can only post in a configuration for one type based on the environment variables.
 
 For an awesome deployment app to deploy your landscape checkout Eneco's [Landscaper](https://github.com/Eneco/landscaper).
 

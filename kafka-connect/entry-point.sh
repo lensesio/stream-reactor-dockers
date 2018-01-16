@@ -14,7 +14,7 @@ function push_config {
     echo "done."
 }
 APP_PROPERTIES_FILE=/etc/config/connector.properties
-CLI=/etc/datamountaineer/bin/connect-cli
+CLI=/etc/landoop/bin/connect-cli
 
 # cli expects this env var
 export KAFKA_CONNECT_REST="http://$CONNECT_REST_ADVERTISED_HOST_NAME:$CONNECT_REST_PORT"
@@ -25,7 +25,7 @@ mkdir /etc/config
 dub template "/etc/confluent/docker/connector.properties.template" "$APP_PROPERTIES_FILE"
 push_config &
 
-export CONNECT_PLUGIN_PATH=/etc/datamountaineer/jars
+export CONNECT_PLUGIN_PATH=/etc/ladoop/jars
 # start connect using dumb-init to handle signals
 exec /etc/confluent/docker/run
 # EOF
