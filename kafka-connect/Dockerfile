@@ -40,4 +40,4 @@ RUN wget https://github.com/landoop/stream-reactor/releases/download/${STREAM_RE
     mv connect-cli /etc/landoop/bin && \
     chmod +x  /etc/landoop/bin/connect-cli
 
-CMD ["dumb-init", "/etc/landoop/entry-point.sh"]
+CMD ["dumb-init", "/etc/landoop/bin/entry-point.sh"]
