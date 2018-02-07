@@ -1,4 +1,4 @@
-FROM confluentinc/cp-kafka-connect:3.3.1
+FROM confluentinc/cp-kafka-connect:4.0.0
 
 ARG STREAM_REACTOR_VERSION
 ARG STREAM_REACTOR_COMPONENT
@@ -14,7 +14,7 @@ ENV COMPONENT ${COMPONENT}
 #
 RUN apt-get update && \
     apt-get install jq && \
-    mkdir -p /etc/landoop/jars && \
+    mkdir -p /etc/landoop/jars/lib && \
     mkdir -p /etc/landoop/bin
 COPY liveliness.sh /etc/landoop/bin/liveliness.sh
 COPY entry-point.sh /etc/landoop/bin/entry-point.sh
@@ -36,8 +36,8 @@ RUN wget https://github.com/landoop/stream-reactor/releases/download/${STREAM_RE
     chmod +x /etc/landoop/bin/entry-point.sh && \
     wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 && \
     chmod +x /usr/local/bin/dumb-init && \
-    mv kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${KAFKA_VERSION}-all.jar /etc/landoop/jars && \
+    mv kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${KAFKA_VERSION}-all.jar /etc/landoop/jars/lib && \
     mv connect-cli /etc/landoop/bin && \
     chmod +x  /etc/landoop/bin/connect-cli
 
-CMD ["dumb-init", "/etc/landoop/entry-point.sh"]
+CMD ["dumb-init", "/etc/landoop/bin/entry-point.sh"]
