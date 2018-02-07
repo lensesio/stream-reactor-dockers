@@ -25,7 +25,7 @@ mkdir /etc/config
 dub template "/etc/confluent/docker/connector.properties.template" "$APP_PROPERTIES_FILE"
 push_config &
 
-export CONNECT_PLUGIN_PATH=/etc/ladoop/jars
+export CONNECT_PLUGIN_PATH=/etc/landoop/jars/lib
 # start connect using dumb-init to handle signals
 exec /etc/confluent/docker/run
 # EOF

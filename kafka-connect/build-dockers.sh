@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-STREAM_REACTOR_VERSION="0.4.0"
-KAFKA_VERSION="0.11.0.1"
+STREAM_REACTOR_VERSION="1.0.0"
+KAFKA_VERSION="1.0.0"
 COMPONENT="kafka-connect"
 REPO="datamountaineer"
 export STREAM_REACTOR_VERSION
@@ -22,8 +22,8 @@ do
         -t ${REPO}/kafka-connect-${STREAM_REACTOR_COMPONENT}:${STREAM_REACTOR_VERSION} \
         -t ${REPO}/kafka-connect-${STREAM_REACTOR_COMPONENT} \
         -f Dockerfile .
-        docker push datamountaineer/kafka-connect-${STREAM_REACTOR_COMPONENT}:${STREAM_REACTOR_VERSION}
-        docker push datamountaineer/kafka-connect-${STREAM_REACTOR_COMPONENT}
+        docker push ${REPO}/kafka-connect-${STREAM_REACTOR_COMPONENT}:${STREAM_REACTOR_VERSION}
+        docker push ${REPO}/kafka-connect-${STREAM_REACTOR_COMPONENT}
 done < "$input"
 
 
