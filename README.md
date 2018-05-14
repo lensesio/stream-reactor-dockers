@@ -1,12 +1,16 @@
-# DataMountaineer Dockers
+# Stream Reactor Dockers
 
-These images use Confluent's docker utility belt to take all environment variables prefixed with `CONNECTOR` to create a
-connector properties file. Environment variables beginning with `CONNECT` are used to create the properties file for the Kafka Connect 
-Cluster. The Connector properties file is then pushed via DataMountaineers Connect [CLI](https://github.com/landoop/kafka-connect-tools) to the Connect workers API once it's up to start the connector.
+![Alt text](streamreactor-logo.png)
 
-The expected usecase is that the Connect Worker joins with other pods deployed via [Helm](https://helm.sh/) to form a Connect Cluster for a specific instance of one connector only. It can only post in a configuration for one type based on the environment variables.
+Environment variables prefixed with `CONNECTOR` are used to create a connector properties file. Environment variables beginning with `CONNECT` are used to create the properties file for the Kafka Connect Cluster. The Connector properties file is then pushed via DataMountaineers Connect [CLI](https://github.com/landoop/kafka-connect-tools) to the Connect workers API once it's up to start the connector.
+
+The expected use case is that the Connect Worker joins with other pods deployed via [Helm](https://helm.sh/) to form a Connect Cluster for a specific instance of one connector only. It can only post in a configuration for one type based on the environment variables.
 
 For an awesome deployment app to deploy your landscape checkout Eneco's [Landscaper](https://github.com/Eneco/landscaper).
+
+## Helm
+
+[Helm charts](https://github.com/Landoop/kafka-helm-charts) are available for deployment into Kubernetes.
 
 For example:
 ```bash
@@ -31,5 +35,5 @@ docker run \
          -e CONNECTOR_TOPICS="topic_consumer_logs" \
          -e CONNECTOR_CONNECT_ELASTIC_URL="http://elastic_url" \
          -e CONNECTOR_CONNECT_ELASTIC_CLUSTER_NAME="elasticsearch" \
-         datamountaineer/kafka-connect-elastic:0.2.5
+         datamountaineer/kafka-connect-elastic:1.1.0
 ```

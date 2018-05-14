@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-STREAM_REACTOR_VERSION="1.0.0"
-KAFKA_VERSION="1.0.0"
+STREAM_REACTOR_VERSION="1.1.0"
+KAFKA_VERSION="1.1.0"
 COMPONENT="kafka-connect"
 REPO="datamountaineer"
 export STREAM_REACTOR_VERSION
