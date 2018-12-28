@@ -9,6 +9,7 @@ elastic5
 elastic6
 hazelcast
 hbase
+hive
 influxdb
 jms
 kudu
