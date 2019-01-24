@@ -1,30 +1,29 @@
 services:
 - docker
-
 env:
   global:
-    LENSES_CLI_VERSION=2.2.3
-    CONFLUENT_VERSION=5.1.0
-    KAFKA_VERSION=2.1.0
-
+  - LENSES_CLI_VERSION=2.2.3 CONFLUENT_VERSION=5.1.0 KAFKA_VERSION=2.1.0
+  - secure: iIMLXm3GBzVsW/7u3Fx/N+BFk7P+InmDmJLOJyFUq1IdR93tWLQdPgPJJ+8kSx6mm7sJZTB+2Znz3R0sqKRfOZKKJJT7ezY1yn5QX1yU9wSuIFEdBDnMA3ospatc3qDE2BG0k1kaHt3pDrxJQKag3ZLOBgdfzIPfKTRbW8yOZh7O7VgMbYt5UZ4x8SueyhBcYCZcByiRYTw5soYjEQk3zTxyuvEpPCSqkCYoQNnrdHvpj+jpjc3afaMVm5fj/KOX6/rDeFAutWSTIkZYt8Yr8VwfnFWSTFd9DDEa0SbEBDel8npleLQzOtux36g2bJt2rGojqcaEMTF6da1yW8qc4vTmwIq1H8ZLJX4yLG8ISen5hFpxvguyAuNK1ILUrP1cVkSkeZqu7y+/8WwOvpH7+wq8xwOXMqg2/sXzCqGBWMvPh004tVC2tJas6fh2qcVN+bBP3I+hkXiGY+RbqRM8Ce99V85WVOvvUXZeoelWwo8hWOV/D4LSjBBPtfJ+gKr6w2sL4wrocy9k2JKVqft/uZwQQ2PsNK9oGv9es6VVrCQ7iwtqVfv36dtxvwcBW/zeIUWpGmxN8NyVvlOHv+bwb1yVeiaVxqVDSrmdr3iWCXoRnb+0donmLXaX7VTO8exVgGEMpTnQkqVBQZBx6S82OOR9Iz8PNoE6YmtDP4IxiFI=
+  - secure: CmghDjgLlBCptboqH5d8ELf6RVsbm6YZSCo9T2Mg+FZ8Gl90Bo/iJywRYym16BW3NiDFMUOnI+heS90Dwne7WveAafm+gpAxwSCBvKYP3S6RHO3z04xKHlqdsiXSv6v6aQzGURnlE880nnJEyhe4pQr8YtlggeYODt1A+7bdIItWhpQBna0Q1MAdPyUsR7HtTyqKdhaEgDw6dJcQb2trafMD+Xu9D8hvWPLOSyvcPXNY1kPXGeweMbGCxodrgM7urSnTqa5h7s/UdZIo46xnv2kTzgr3Ge7cTQ1sqZLErE7116EX0/hCdHOOMnicTkUbSsiAktOa9OybBox0mq9YW+SV2SBNx7UFg0Nkz9RGOMduCqdM+fA8zBtDgQ/jvLm21uh3nL8s7U1dsN7Bs9Qrfoqq7sLwNsbAoASPrUl4vZ6FlzFwH4LdAZ8e8U5akLr/24/nKTalfYAWJOlanjDTy4B0klZPKwPRQ28XZ533ROimY51uhx91tjdqfo2VnyANZtp/5mJi11ukPiOzCdE0fJh6uBRhzghfhab5Uhks7+tdz73h4apVgkBUftlr6AkITgeaXR2mRr9DxJY6Yb6lBWlb7nU0Xl7iTD5XAagMKXkdJUGipQWKWVa62VYMZozbJu9lMZmFZeFlM8mgRjBbSlRH2MMscecqq/h+k+IA+Bg=
 
 before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
-
 jobs:
   include:
   - stage: Build
-    deploy:  
+    deploy:
       on:
-        tags: false 
+        tags: false
       provider: script
-      script: bash ./build-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+      script: bash ./build-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION}
+        ${LENSES_CLI_VERSION}
   - stage: Publish
-    deploy:   
+    deploy:
       on:
         tags: true
       provider: script
-      script: bash ./publish-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+      script: bash ./publish-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION}
+        ${LENSES_CLI_VERSION}
