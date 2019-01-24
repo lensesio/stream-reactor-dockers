@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+COMPONENT="kafka-connect"
+TAG=$1
+CONFLUENT_VERSION=$2
+LENSES_CLI_VERSION=$3
+REPO=landoop
+export LENSES_CLI_VERSION
+export CONFLUENT_VERSION
+
+if [[ -z "${TAG}" ]]; then
+    echo "No tag provided"
+    exit 1
+fi
+
+if [[ -z "${CONFLUENT_VERSION}" ]]; then
+    echo "No confluent version provided"
+    exit 1
+fi
+
+if [[ -z "${LENSES_CLI_VERSION}" ]]; then
+    echo "No CLI version provided"
+    exit 1
+fi
+
+echo "Building base connect docker"
+docker build \
+    --build-arg CONFLUENT_VERSION=${CONFLUENT_VERSION} \
+    --build-arg LENSES_CLI_VERSION=${LENSES_CLI_VERSION} \
+    -t ${REPO}/kafka-connect-base:${TAG} \
+    -t ${REPO}/kafka-connect-base \
+    -f ${DIR}/Dockerfile ${DIR}

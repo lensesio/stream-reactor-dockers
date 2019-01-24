@@ -10,7 +10,7 @@ For an awesome deployment app to deploy your landscape checkout Eneco's [Landsca
 
 ## Helm
 
-[Helm charts](https://github.com/Landoop/kafka-helm-charts) are available for deployment into Kubernetes.
+[Helm charts](https://github.com/landoop/kafka-helm-charts) are available for deployment into Kubernetes.
 
 For example:
 ```bash
@@ -35,5 +35,15 @@ docker run \
          -e CONNECTOR_TOPICS="topic_consumer_logs" \
          -e CONNECTOR_CONNECT_ELASTIC_URL="http://elastic_url" \
          -e CONNECTOR_CONNECT_ELASTIC_CLUSTER_NAME="elasticsearch" \
-         datamountaineer/kafka-connect-elastic:1.1.0
+         landoop/kafka-connect-elastic:1.2.1
 ```
+
+## Secrets
+
+Secrets, .i.e. connections to data stores can be stored in external systems such as Hasihcorp Vault, Azure Keyvault
+or as retrieved from environment variables.
+
+The Lenses CLI is included in the base connect image. This will run and configure the Connect properties files. Setting
+the `SECRETS_PROVIDER` variable determines how to retrieve the values. Either `env`, `vault` or`azure`.
+
+To have secrets written to a separate file prefix them with `SECRET_`. See the [Lenses CLI](https://docs.lenses.io/dev/lenses-cli/index.html#) for more details.

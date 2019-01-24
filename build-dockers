@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+TAG=$1
+CONFLUENT_VERSION=$2
+KAFKA_VERSION=$3
+LENSES_CLI_VERSION=$4
+
+if [[ -z "${TAG}" ]]; then
+    echo "No tag provided"
+    echo "Usage: ./build-dockers tag confluent-version kafka-version cli-version"
+    exit 1
+fi
+
+if [[ -z "${CONFLUENT_VERSION}" ]]; then
+    echo "No confluent version provided"
+    echo "Usage: ./build-dockers tag confluent-version kafka-version cli-version"
+    exit 1
+fi
+
+if [[ -z "${KAFKA_VERSION}" ]]; then
+    echo "No CLI version provided"
+    echo "Usage: ./build-dockers tag confluent-version kafka-version cli-version"
+    exit 1
+fi
+
+if [[ -z "${LENSES_CLI_VERSION}" ]]; then
+    echo "No CLI version provided"
+    echo "Usage: ./build-dockers tag confluent-version kafka-version cli-version"
+    exit 1
+fi
+
+./kafka-connect-base/build ${TAG} ${CONFLUENT_VERSION} ${LENSES_CLI_VERSION}
+./stream-reactor/build ${TAG} ${KAFKA_VERSION}

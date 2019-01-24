@@ -1,0 +1,30 @@
+services:
+- docker
+
+env:
+  global:
+    LENSES_CLI_VERSION=2.2.3
+    CONFLUENT_VERSION=5.1.0
+    KAFKA_VERSION=2.1.0
+
+
+before_install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+
+jobs:
+  include:
+  - stage: Build
+    deploy:  
+      on:
+        tags: false 
+      provider: script
+      script: bash ./build-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+  - stage: Publish
+    deploy:   
+      on:
+        tags: true
+      provider: script
+      script: bash ./publish-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
