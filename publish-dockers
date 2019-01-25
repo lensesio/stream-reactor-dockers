@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+TAG=$1
+CONFLUENT_VERSION=$2
+KAFKA_VERSION=$3
+LENSES_CLI_VERSION=$4
+REPO=streamreactor
+
+./build-dockers ${TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+
+# docker login
+docker push ${REPO}/stream-reactor-base:${TAG}
+docker push ${REPO}/stream-reactor-base
+
+input="stream-reactor/connectors.txt"
+
+while IFS= read -r STREAM_REACTOR_COMPONENT
+do
+    echo "Publishing ${STREAM_REACTOR_COMPONENT} connector version ${TAG}"
+    docker push ${REPO}/${STREAM_REACTOR_COMPONENT}:${TAG}
+    docker push ${REPO}/${STREAM_REACTOR_COMPONENT}
+done < "$input"

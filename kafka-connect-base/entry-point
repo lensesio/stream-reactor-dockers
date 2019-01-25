@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+function push_config {
+    # wait until local connect's REST API comes up
+    until $CLI_CMD ps >>/dev/null
+    do
+        echo "Waiting for connect's rest API at $KAFKA_CONNECT_REST"
+        sleep 10
+    done
+    echo "Pushing connector config..."
+    sleep 5
+    # cat $APP_PROPERTIES_FILE
+    $CONNECT_CLI run $CONNECTOR_NAME < $APP_PROPERTIES_FILE
+    echo "done."
+}
+
+# cli expects this env var
+export KAFKA_CONNECT_REST="http://$CONNECT_REST_ADVERTISED_HOST_NAME:$CONNECT_REST_PORT"
+
+# use the cli to write the connect files if we don't have then in the shared mount
+if [ ! -f /etc/connect-share ]; then
+    echo "/etc/connect-share does not exist. Configuring from environment variables."
+    /opt/lenses/bin/configure
+else 
+    echo "Copying files from /etc/connect-share/ to /etc/kafka-connect"  
+    cp /etc/connect-share/connector.props /etc/kafka-connect/connector.properties
+    cp /etc/connect-share/secret.props /etc/kafka-connect/secrets.properties 
+    cp /etc/connect-share/worker.props /etc/kafka-connect/kafka-connect.properties 
+fi
+
+push_config &
+
+# start connect using dumb-init to handle signals
+echo "Starting Connect worker"
+exec /etc/confluent/docker/launch
+# EOF
