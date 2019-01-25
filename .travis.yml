@@ -16,11 +16,10 @@ before_install:
 jobs:
   include:
   - stage: Build
-    deploy:
-      on:
-        tags: false
-      provider: script
-      script: bash ./build-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+    branches:
+      except:
+        - master
+    script: bash ./build-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
   - stage: Publish
     deploy:
       on:
