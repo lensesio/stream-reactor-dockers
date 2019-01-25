@@ -9,7 +9,7 @@ REPO=streamreactor
 
 ./build-dockers ${TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
 
-docker login
+echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
 docker push ${REPO}/stream-reactor-base:${TAG}
 docker push ${REPO}/stream-reactor-base
 

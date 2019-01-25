@@ -1,18 +1,17 @@
 language: generic
-
 services:
 - docker
 env:
   global:
   - LENSES_CLI_VERSION=2.2.3 CONFLUENT_VERSION=5.1.0 KAFKA_VERSION=2.1.0
-  - secure: iIMLXm3GBzVsW/7u3Fx/N+BFk7P+InmDmJLOJyFUq1IdR93tWLQdPgPJJ+8kSx6mm7sJZTB+2Znz3R0sqKRfOZKKJJT7ezY1yn5QX1yU9wSuIFEdBDnMA3ospatc3qDE2BG0k1kaHt3pDrxJQKag3ZLOBgdfzIPfKTRbW8yOZh7O7VgMbYt5UZ4x8SueyhBcYCZcByiRYTw5soYjEQk3zTxyuvEpPCSqkCYoQNnrdHvpj+jpjc3afaMVm5fj/KOX6/rDeFAutWSTIkZYt8Yr8VwfnFWSTFd9DDEa0SbEBDel8npleLQzOtux36g2bJt2rGojqcaEMTF6da1yW8qc4vTmwIq1H8ZLJX4yLG8ISen5hFpxvguyAuNK1ILUrP1cVkSkeZqu7y+/8WwOvpH7+wq8xwOXMqg2/sXzCqGBWMvPh004tVC2tJas6fh2qcVN+bBP3I+hkXiGY+RbqRM8Ce99V85WVOvvUXZeoelWwo8hWOV/D4LSjBBPtfJ+gKr6w2sL4wrocy9k2JKVqft/uZwQQ2PsNK9oGv9es6VVrCQ7iwtqVfv36dtxvwcBW/zeIUWpGmxN8NyVvlOHv+bwb1yVeiaVxqVDSrmdr3iWCXoRnb+0donmLXaX7VTO8exVgGEMpTnQkqVBQZBx6S82OOR9Iz8PNoE6YmtDP4IxiFI=
-  - secure: CmghDjgLlBCptboqH5d8ELf6RVsbm6YZSCo9T2Mg+FZ8Gl90Bo/iJywRYym16BW3NiDFMUOnI+heS90Dwne7WveAafm+gpAxwSCBvKYP3S6RHO3z04xKHlqdsiXSv6v6aQzGURnlE880nnJEyhe4pQr8YtlggeYODt1A+7bdIItWhpQBna0Q1MAdPyUsR7HtTyqKdhaEgDw6dJcQb2trafMD+Xu9D8hvWPLOSyvcPXNY1kPXGeweMbGCxodrgM7urSnTqa5h7s/UdZIo46xnv2kTzgr3Ge7cTQ1sqZLErE7116EX0/hCdHOOMnicTkUbSsiAktOa9OybBox0mq9YW+SV2SBNx7UFg0Nkz9RGOMduCqdM+fA8zBtDgQ/jvLm21uh3nL8s7U1dsN7Bs9Qrfoqq7sLwNsbAoASPrUl4vZ6FlzFwH4LdAZ8e8U5akLr/24/nKTalfYAWJOlanjDTy4B0klZPKwPRQ28XZ533ROimY51uhx91tjdqfo2VnyANZtp/5mJi11ukPiOzCdE0fJh6uBRhzghfhab5Uhks7+tdz73h4apVgkBUftlr6AkITgeaXR2mRr9DxJY6Yb6lBWlb7nU0Xl7iTD5XAagMKXkdJUGipQWKWVa62VYMZozbJu9lMZmFZeFlM8mgRjBbSlRH2MMscecqq/h+k+IA+Bg=
-
+  - secure: n6u3R5U9XqcXKqQp8iM+zsdN7YQ3WKqMjWgBw6YFiQosZzMVNHVqck6TDnM0xsRqglpiBDDnLnDFGL1H/ulCJc+LTXciHGahoqIEqXQh8f0/FcfRfJQ+Gczot4KU/wIaVbI/jcDwjF5HcwnxYWfFYfauJSaJCnuNI0H8yQcD5piEwUHtkInc2BR+gTvRbizmCsFx59xoKL2i4Tjfo8jIH8oEKctSacYLEYJshMO092zpExv5SsHcu9ZOrAcFgrmdgQKc6O6BvHZaPY3Ny+erHguBMYZIU/a2E7yPkX/HUo1w851fdqxkzQeMWAfu7xQC80INBc7zw3IqidZ0G4qrCsTfAqzKZXaLdBdBs6AIxnfFph8ZH60xE3wZ6+buAErKBQ8i6W9x9OvVhttuw2UR+maKE7YN0OR5RCLoQu5iJF+Sbp7YS0nQwDRyihU5qdbBsb/kqpIYvU6YtNTkuqrNL8HftaOCIiGDEpq3ENN572CayWVsyFNRCNGScVlEhBOo/9YZJrSrmdKxzfy6Ha1+OxHzLjbd6i5PsJ1L4er8yuYVngCQGpEKJqgmb3qTN2WHP39pw2BAyZs15uBOn0vszwLu5UhxJAlL0wNQg8tM0P+8zEMmmohjh+AY/QWni/5KbSOB4bH4LANbtRtGWJYPryZSGlQKEGHMEesxuRwKKCU=
+  - secure: Qxv2mHWut+Jpoy2KKnUs340v8nVH+nj6L14zpq79dOfb+F/nEhgfC+u3/pp0do+iGV8Arifr0Plf06dUtY3WC6Ua6A7kvMIibYrNuvKTD/mkffUfKQCtWG73GA4kEDaBo5YpP4gwycDiIk8NM1jx3xovpolg3kYhO+AFzmZ6oGcGq3HYI3kbyZfUoAMu3kfrXgd19jt+P1cj/NGoCbFo6/uBRwzaKyqLzc541m38JNVCoEN1FYIDsF/oVTi3EikLhC2YnuqOEQpiTU3P2b2ZL2YT1xE5JJ3K5VmQfaaLx45mY4Cihh18N5o6I9ExBmAgf+2Yjp6D+OqRdn5UUKDQAvSfJxayftHIvqF12IpR0s7iNrm6+sUPp1vtihpIw8RVbO86014hEciew2kjAZ9z7Yb60Xu4OI6d2/pDhy4+wgbJ5zIDWcWQihrwlj05xKkA+Yz61c/q0yf2Ns8dZ6JfUJD3NxrAFBRTKpBeniESLofQxT/mfBOiLEVZJAE9SwTu9+iPeGrm9YHkDdDqNNuTzWhrOBSddeuCDWvakmWorEebZd8QVGg16uFZokwYzJyIl4upgUK0eqAhx/FtO3qZC6l5KG8cyrn8bp24xPSxZWOaG5bXNxQFoY14xuGOIg8c0oxv6Iw8BjV05vbkQzJNRWLyn/yhIWbzpIBM02GyaCk=
 before_install:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
+  $(lsb_release -cs) stable"
+- sudo apt-get update
+- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 jobs:
   include:
   - stage: Publish
@@ -20,4 +19,5 @@ jobs:
       on:
         tags: true
       provider: script
-      script: bash ./publish-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+      script: bash ./publish-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION}
+        ${LENSES_CLI_VERSION}
