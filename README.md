@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/Landoop/dockers.svg?branch=master)](https://travis-ci.org/Landoop/dockers)
 ![Alt text](streamreactor-logo.png)
 
-Dockers are published to landoop/kafka-connect-* from Stream Reactor versions 1.2.1 and higher. Previous versions
+Dockers are published to [streamreactor](https://cloud.docker.com/u/streamreactor/repository/list) dockerhub repo from Stream Reactor versions 1.2.1 and higher. Previous versions
 can be found at [datamountaineer](https://cloud.docker.com/u/datamountaineer/repository/list)
 
 Environment variables prefixed with `CONNECTOR` are used to create a connector properties file. Environment variables beginning with `CONNECT` are used to create the properties file for the Kafka Connect Cluster. The Connector properties file is then pushed via DataMountaineers Connect [CLI](https://github.com/landoop/kafka-connect-tools) to the Connect workers API once it's up to start the connector.
