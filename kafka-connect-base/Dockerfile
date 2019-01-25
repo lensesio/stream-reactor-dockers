@@ -1,5 +1,5 @@
 ARG CONFLUENT_VERSION
-FROM confluentinc/cp-kafka-connect:${CONFLUENT_VERSION}
+FROM confluentinc/cp-kafka-connect-base:${CONFLUENT_VERSION}
 
 ARG LENSES_CLI_VERSION
 ARG CALCITE_LINQ4J_VERSION=1.12.0

@@ -18,12 +18,10 @@ jobs:
       on:
         tags: false
       provider: script
-      script: bash ./build-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION}
-        ${LENSES_CLI_VERSION}
+      script: bash ./build-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
   - stage: Publish
     deploy:
       on:
         tags: true
       provider: script
-      script: bash ./publish-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION}
-        ${LENSES_CLI_VERSION}
+      script: bash ./publish-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}

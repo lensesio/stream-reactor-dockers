@@ -27,6 +27,6 @@ if [[ -z "${LENSES_CLI_VERSION}" ]]; then
     echo "Usage: ./build-dockers tag confluent-version kafka-version cli-version"
     exit 1
 fi
-docker login
+
 ./kafka-connect-base/build ${TAG} ${CONFLUENT_VERSION} ${LENSES_CLI_VERSION}
 ./stream-reactor/build ${TAG} ${KAFKA_VERSION}

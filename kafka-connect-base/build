@@ -7,7 +7,7 @@ COMPONENT="kafka-connect"
 TAG=$1
 CONFLUENT_VERSION=$2
 LENSES_CLI_VERSION=$3
-REPO=landoop
+REPO=streamreactor
 export LENSES_CLI_VERSION
 export CONFLUENT_VERSION
 
@@ -30,6 +30,6 @@ echo "Building base connect docker"
 docker build \
     --build-arg CONFLUENT_VERSION=${CONFLUENT_VERSION} \
     --build-arg LENSES_CLI_VERSION=${LENSES_CLI_VERSION} \
-    -t ${REPO}/kafka-connect-base:${TAG} \
-    -t ${REPO}/kafka-connect-base \
+    -t ${REPO}/stream-reactor-base:${TAG} \
+    -t ${REPO}/stream-reactor-base \
     -f ${DIR}/Dockerfile ${DIR}

@@ -1,5 +1,5 @@
 ARG BASE_VERSION
-FROM landoop/kafka-connect-base:${BASE_VERSION}
+FROM streamreactor/stream-reactor-base:${BASE_VERSION}
 
 ARG STREAM_REACTOR_VERSION
 ARG STREAM_REACTOR_COMPONENT
