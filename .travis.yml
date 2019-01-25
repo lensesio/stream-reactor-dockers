@@ -19,7 +19,7 @@ jobs:
     branches:
       except:
         - master
-    script: bash ./build-dockers ${TRAVIS_TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+    script: bash ./build-dockers ${TRAVIS_BUILD_NUMBER} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
   - stage: Publish
     deploy:
       on:
