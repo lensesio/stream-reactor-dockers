@@ -2,7 +2,7 @@
 
 function push_config {
     # wait until local connect's REST API comes up
-    until $CLI_CMD ps >>/dev/null
+    until /opt/lenses/bin/connect-cli ps >>/dev/null
     do
         echo "Waiting for connect's rest API at $KAFKA_CONNECT_REST"
         sleep 10
@@ -10,7 +10,7 @@ function push_config {
     echo "Pushing connector config..."
     sleep 5
     # cat $APP_PROPERTIES_FILE
-    $CONNECT_CLI run $CONNECTOR_NAME < $APP_PROPERTIES_FILE
+    /opt/lenses/bin/connect-cli run $CONNECTOR_NAME < $APP_PROPERTIES_FILE
     echo "done."
 }
 
@@ -26,6 +26,17 @@ else
     cp /etc/connect-share/connector.props /etc/kafka-connect/connector.properties
     cp /etc/connect-share/secret.props /etc/kafka-connect/secrets.properties 
     cp /etc/connect-share/worker.props /etc/kafka-connect/kafka-connect.properties 
+fi
+
+if [ ! -f /etc/kafka-connect/connector.properties ]; then
+    echo "Failed to find /etc/kafka-connect/connector.properties"
+    exit 1
+elif [ ! -f /etc/kafka-connect/secrets.properties ]; then
+    echo "Failed to find /etc/kafka-connect/secrets.properties"
+    exit 1
+elif [ ! -f /etc/kafka-connect/kafka-connect.properties ]; then
+    echo "Failed to find /etc/kafka-connect/kafka-connect.properties"
+    exit 1
 fi
 
 push_config &

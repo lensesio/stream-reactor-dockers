@@ -33,9 +33,8 @@ RUN mkdir -p /opt/jmx_exporter && \
     chmod +x /opt/lenses/bin/lenses-cli-linux-amd64 && \
     mv /opt/lenses/bin/lenses-cli-linux-amd64 /opt/lenses/bin/lenses-cli && \
     wget http://central.maven.org/maven2/org/apache/calcite/calcite-linq4j/${CALCITE_LINQ4J_VERSION}/calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar && \
-    mv calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar /etc/kafka-connect/jars/
-
-RUN rm -f -r /usr/share/java/kafka-connect-activemq \
+    mv calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar /etc/kafka-connect/jars/ && \
+    rm -f -r /usr/share/java/kafka-connect-activemq \
              /usr/share/java/kafka-connect-activemq \  
              /usr/share/java/kafka-connect-ibmmq \
              /usr/share/java/kafka-connect-jms \
@@ -45,7 +44,8 @@ RUN rm -f -r /usr/share/java/kafka-connect-activemq \
              /usr/share/java/rest-utils \
              /usr/share/java/confluent-hub-client \
              /usr/share/java/confluent-control-center \
-             /usr/share/java/confluent-rebalancer
+             /usr/share/java/confluent-rebalancer && \
+    unset CONNECT_CLI
 
 ENV COMPONENT=kafka-connect
 ENV KAFKA_JMX_OPTS="-javaagent:/opt/jmx_exporter/jmx_prometheus_javaagent-0.7.jar=9102:/etc/jmx_exporter/config.yaml"
