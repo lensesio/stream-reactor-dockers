@@ -31,9 +31,6 @@ fi
 if [ ! -f /etc/kafka-connect/connector.properties ]; then
     echo "Failed to find /etc/kafka-connect/connector.properties"
     exit 1
-elif [ ! -f /etc/kafka-connect/secrets.properties ]; then
-    echo "Failed to find /etc/kafka-connect/secrets.properties"
-    exit 1
 elif [ ! -f /etc/kafka-connect/kafka-connect.properties ]; then
     echo "Failed to find /etc/kafka-connect/kafka-connect.properties"
     exit 1
