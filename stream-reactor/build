@@ -2,18 +2,19 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TAG=$1
-KAFKA_VERSION=$2
+SR_VERSION=$2
+KAFKA_VERSION=$3
 REPO=streamreactor
 
 input="${DIR}/connectors.txt"
 
 while IFS= read -r STREAM_REACTOR_COMPONENT
 do
-    echo "Building ${STREAM_REACTOR_COMPONENT} connector version ${TAG}"
+    echo "Building ${STREAM_REACTOR_COMPONENT} connector version ${SR_VERSION}"
     docker build \
-        --build-arg BASE_VERSION=${TAG} \
+        --build-arg BASE_VERSION=${SR_VERSION} \
         --build-arg STREAM_REACTOR_COMPONENT=${STREAM_REACTOR_COMPONENT} \
-        --build-arg STREAM_REACTOR_VERSION=${TAG} \
+        --build-arg STREAM_REACTOR_VERSION=${SR_VERSION} \
         --build-arg KAFKA_VERSION=${KAFKA_VERSION} \
         -t ${REPO}/${STREAM_REACTOR_COMPONENT}:${TAG} \
         -t ${REPO}/${STREAM_REACTOR_COMPONENT} \

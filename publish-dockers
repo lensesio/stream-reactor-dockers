@@ -2,12 +2,13 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TAG=$1
-CONFLUENT_VERSION=$2
-KAFKA_VERSION=$3
-LENSES_CLI_VERSION=$4
+SR_VERSION=$2
+CONFLUENT_VERSION=$3
+KAFKA_VERSION=$4
+LENSES_CLI_VERSION=$5
 REPO=streamreactor
 
-./build-dockers ${TAG} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+./build-dockers ${TAG} ${SR_VERSION} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
 
 echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
 docker push ${REPO}/stream-reactor-base:${TAG}
