@@ -1,6 +1,6 @@
 # Stream Reactor Dockers
 
-[![Build Status](https://travis-ci.org/Landoop/dockers.svg?branch=master)](https://travis-ci.org/Landoop/dockers)
+[![Build Status](https://travis-ci.org/Landoop/stream-reactor-dockers.svg?branch=master)](https://travis-ci.org/Landoop/stream-reactor-dockers)
 ![Alt text](streamreactor-logo.png)
 
 Dockers are published to [streamreactor](https://cloud.docker.com/u/streamreactor/repository/list) dockerhub repo from Stream Reactor versions 1.2.1 and higher. Previous versions
