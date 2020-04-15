@@ -12,7 +12,8 @@ ENV CONNECT_CLI=/opt/lenses/bin/connect-cli
 RUN apt-get update && \
     apt-get install jq && \
     mkdir -p /opt/lenses/lib && \
-    mkdir -p /opt/lenses/bin
+    mkdir -p /opt/lenses/bin && \
+    echo "progress = dot:giga" | tee /etc/wgetrc
 
 COPY liveliness /opt/lenses/bin/liveliness
 COPY entry-point /opt/lenses/bin/entry-point
@@ -35,11 +36,11 @@ RUN mkdir -p /opt/jmx_exporter && \
     wget https://repo1.maven.org/maven2/org/apache/calcite/calcite-linq4j/${CALCITE_LINQ4J_VERSION}/calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar && \
     mv calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar /etc/kafka-connect/jars/ && \
     rm -f -r /usr/share/java/kafka-connect-activemq \
-             /usr/share/java/kafka-connect-activemq \  
+             /usr/share/java/kafka-connect-activemq \
              /usr/share/java/kafka-connect-ibmmq \
              /usr/share/java/kafka-connect-jms \
-             /usr/share/java/kafka-connect-elasticsearch \  
-             /usr/share/java/kafka-connect-storage-common \    
+             /usr/share/java/kafka-connect-elasticsearch \
+             /usr/share/java/kafka-connect-storage-common \
              /usr/share/java/monitoring-interceptors \
              /usr/share/java/rest-utils \
              /usr/share/java/confluent-hub-client \
