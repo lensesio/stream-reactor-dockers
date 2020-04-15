@@ -22,17 +22,17 @@ COPY config.yaml /etc/jmx_exporter/config.yaml
 RUN mkdir -p /opt/jmx_exporter && \
     wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.7/jmx_prometheus_javaagent-0.7.jar -O \
     /opt/jmx_exporter/jmx_prometheus_javaagent-0.7.jar && \
-    wget https://github.com/landoop/kafka-connect-tools/releases/download/v1.0.6/connect-cli && \
+    wget https://github.com/lensesio/kafka-connect-tools/releases/download/v1.0.6/connect-cli && \
     chmod +x /opt/lenses/bin/entry-point && \
     wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 && \
     chmod +x /usr/local/bin/dumb-init && \
     mv connect-cli /opt/lenses/bin && \
     chmod +x  /opt/lenses/bin/connect-cli && \
-    wget https://github.com/landoop/lenses-go/releases/download/${LENSES_CLI_VERSION}/lenses-cli-linux-amd64.tar.gz && \
+    wget https://github.com/lensesio/lenses-go/releases/download/${LENSES_CLI_VERSION}/lenses-cli-linux-amd64.tar.gz && \
     tar -xf lenses-cli-linux-amd64.tar.gz -C /opt/lenses/bin && \
     chmod +x /opt/lenses/bin/lenses-cli-linux-amd64 && \
     mv /opt/lenses/bin/lenses-cli-linux-amd64 /opt/lenses/bin/lenses-cli && \
-    wget http://central.maven.org/maven2/org/apache/calcite/calcite-linq4j/${CALCITE_LINQ4J_VERSION}/calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar && \
+    wget https://repo1.maven.org/maven2/org/apache/calcite/calcite-linq4j/${CALCITE_LINQ4J_VERSION}/calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar && \
     mv calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar /etc/kafka-connect/jars/ && \
     rm -f -r /usr/share/java/kafka-connect-activemq \
              /usr/share/java/kafka-connect-activemq \  
