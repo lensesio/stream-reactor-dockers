@@ -70,7 +70,6 @@ Since release 2.0.0 the dockers now support Config Providers for
 
 See Lenses [Documentation](https://docs.lenses.io/connectors/secret-providers) for usage.
 
-
 **Pre 2.0.0**
 
 Pior releases use the Lenses CLI .The Lenses CLI is included in the base connect image. This will run and
