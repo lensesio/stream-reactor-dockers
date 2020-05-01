@@ -18,13 +18,7 @@ if [[ -z "${CONFLUENT_VERSION}" ]]; then
 fi
 
 if [[ -z "${KAFKA_VERSION}" ]]; then
-    echo "No CLI version provided"
-    echo "Usage: ./build-dockers tag sr-version confluent-version kafka-version cli-version"
-    exit 1
-fi
-
-if [[ -z "${LENSES_CLI_VERSION}" ]]; then
-    echo "No CLI version provided"
+    echo "No Kafka version provided"
     echo "Usage: ./build-dockers tag sr-version confluent-version kafka-version cli-version"
     exit 1
 fi
@@ -35,5 +29,5 @@ if [[ -z "${SR_VERSION}" ]]; then
     exit 1
 fi
 
-./kafka-connect-base/build ${SR_VERSION} ${CONFLUENT_VERSION} ${LENSES_CLI_VERSION}
+./kafka-connect-base/build ${SR_VERSION} ${CONFLUENT_VERSION}
 ./stream-reactor/build ${TAG} ${SR_VERSION} ${KAFKA_VERSION}

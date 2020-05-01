@@ -29,7 +29,6 @@ fi
 echo "Building base connect docker"
 docker build \
     --build-arg CONFLUENT_VERSION=${CONFLUENT_VERSION} \
-    --build-arg LENSES_CLI_VERSION=${LENSES_CLI_VERSION} \
     -t ${REPO}/stream-reactor-base:${TAG} \
     -t ${REPO}/stream-reactor-base \
     -f ${DIR}/Dockerfile ${DIR}

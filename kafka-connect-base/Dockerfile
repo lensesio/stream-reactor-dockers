@@ -1,7 +1,6 @@
 ARG CONFLUENT_VERSION
 FROM confluentinc/cp-kafka-connect-base:${CONFLUENT_VERSION}
 
-ARG LENSES_CLI_VERSION
 ARG CALCITE_LINQ4J_VERSION=1.12.0
 ENV LENSES_CLI_VERSION=${LENSES_CLI_VERSION}
 ENV CALCITE_LINQ4J_VERSION=${CALCITE_LINQ4J_VERSION}
@@ -10,14 +9,13 @@ ENV APP_PROPERTIES_FILE=/etc/kafka-connect/connector.properties
 ENV CONNECT_CLI=/opt/lenses/bin/connect-cli
 
 RUN apt-get update && \
-    apt-get install jq && \
+    apt-get -y --force-yes install jq && \
     mkdir -p /opt/lenses/lib && \
     mkdir -p /opt/lenses/bin && \
     echo "progress = dot:giga" | tee /etc/wgetrc
 
 COPY liveliness /opt/lenses/bin/liveliness
 COPY entry-point /opt/lenses/bin/entry-point
-COPY configure /opt/lenses/bin/configure
 COPY config.yaml /etc/jmx_exporter/config.yaml
 
 RUN mkdir -p /opt/jmx_exporter && \
@@ -29,10 +27,8 @@ RUN mkdir -p /opt/jmx_exporter && \
     chmod +x /usr/local/bin/dumb-init && \
     mv connect-cli /opt/lenses/bin && \
     chmod +x  /opt/lenses/bin/connect-cli && \
-    wget https://github.com/lensesio/lenses-go/releases/download/${LENSES_CLI_VERSION}/lenses-cli-linux-amd64.tar.gz && \
-    tar -xf lenses-cli-linux-amd64.tar.gz -C /opt/lenses/bin && \
-    chmod +x /opt/lenses/bin/lenses-cli-linux-amd64 && \
-    mv /opt/lenses/bin/lenses-cli-linux-amd64 /opt/lenses/bin/lenses-cli && \
+    wget https://github.com/lensesio/secret-provider/releases/download/0.0.1/secret-provider-0.0.1-all.jar && \
+    mv secret-provider-0.0.1-all.jar /etc/kafka-connect/jars/ && \
     wget https://repo1.maven.org/maven2/org/apache/calcite/calcite-linq4j/${CALCITE_LINQ4J_VERSION}/calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar && \
     mv calcite-linq4j-${CALCITE_LINQ4J_VERSION}.jar /etc/kafka-connect/jars/ && \
     rm -f -r /usr/share/java/kafka-connect-* \

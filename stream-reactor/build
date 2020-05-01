@@ -2,7 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TAG=$1
-SR_VERSION=$2
+STREAM_REACTOR_VERSION=$2
 KAFKA_VERSION=$3
 REPO=streamreactor
 
@@ -10,12 +10,14 @@ input="${DIR}/connectors.txt"
 
 while IFS= read -r STREAM_REACTOR_COMPONENT
 do
-    echo "Building ${STREAM_REACTOR_COMPONENT} connector version ${SR_VERSION}"
+    echo "Building ${STREAM_REACTOR_COMPONENT} connector version ${STREAM_REACTOR_VERSION} for kafka ${KAFKA_VERSION}"
+    ARCHIVE=kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${KAFKA_VERSION}-all.tar.gz
+    URL=https://github.com/lensesio/stream-reactor/releases/download/${STREAM_REACTOR_VERSION}/${ARCHIVE}
+    echo $URL
     docker build \
-        --build-arg BASE_VERSION=${SR_VERSION} \
-        --build-arg STREAM_REACTOR_COMPONENT=${STREAM_REACTOR_COMPONENT} \
-        --build-arg STREAM_REACTOR_VERSION=${SR_VERSION} \
-        --build-arg KAFKA_VERSION=${KAFKA_VERSION} \
+        --build-arg STREAM_REACTOR_VERSION=${STREAM_REACTOR_VERSION} \
+        --build-arg ARCHIVE=${ARCHIVE} \
+        --build-arg URL=${URL} \
         -t ${REPO}/${STREAM_REACTOR_COMPONENT}:${TAG} \
         -t ${REPO}/${STREAM_REACTOR_COMPONENT} \
         -f ${DIR}/Dockerfile ${DIR}

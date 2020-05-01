@@ -17,16 +17,8 @@ function push_config {
 # cli expects this env var
 export KAFKA_CONNECT_REST="http://$CONNECT_REST_ADVERTISED_HOST_NAME:$CONNECT_REST_PORT"
 
-# use the cli to write the connect files if we don't have then in the shared mount
-if [ ! -f /etc/connect-share ]; then
-    echo "/etc/connect-share does not exist. Configuring from environment variables."
-    /opt/lenses/bin/configure
-else 
-    echo "Copying files from /etc/connect-share/ to /etc/kafka-connect"  
-    cp /etc/connect-share/connector.props /etc/kafka-connect/connector.properties
-    cp /etc/connect-share/secret.props /etc/kafka-connect/secrets.properties 
-    cp /etc/connect-share/worker.props /etc/kafka-connect/kafka-connect.properties 
-fi
+# configure the worker and connector props files
+/etc/confluent/docker/configure
 
 if [ ! -f /etc/kafka-connect/connector.properties ]; then
     echo "Failed to find /etc/kafka-connect/connector.properties"
