@@ -13,7 +13,7 @@ Environment variables prefixed with `CONNECTOR` are used to create a connector
 properties file. Environment variables beginning with `CONNECT` are used to
 create the properties file for the Kafka Connect Cluster. The Connector
 properties file is then pushed via DataMountaineers
-Connect [CLI](https://github.com/landoop/kafka-connect-tools) to the Connect
+Connect [CLI](https://github.com/lensesio/kafka-connect-tools) to the Connect
 workers API once it's up to start the connector.
 
 The expected use case is that the Connect Worker joins with other pods deployed
@@ -48,7 +48,7 @@ docker run \
          -e CONNECTOR_TOPICS="topic_consumer_logs" \
          -e CONNECTOR_CONNECT_ELASTIC_URL="http://elastic_url" \
          -e CONNECTOR_CONNECT_ELASTIC_CLUSTER_NAME="elasticsearch" \
-         landoop/kafka-connect-elastic:1.2.1
+         lensesio/kafka-connect-elastic:1.2.1
 ```
 
 ## Helm
