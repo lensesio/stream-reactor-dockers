@@ -21,7 +21,7 @@ COPY config.yaml /etc/jmx_exporter/config.yaml
 RUN mkdir -p /opt/jmx_exporter && \
     wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.7/jmx_prometheus_javaagent-0.7.jar -O \
     /opt/jmx_exporter/jmx_prometheus_javaagent-0.7.jar && \
-    wget https://github.com/lensesio/kafka-connect-tools/releases/download/v1.0.8/connect-cli && \
+    wget https://github.com/lensesio/kafka-connect-tools/releases/download/v1.0.9/connect-cli && \
     chmod +x /opt/lenses/bin/entry-point && \
     wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 && \
     chmod +x /usr/local/bin/dumb-init && \
