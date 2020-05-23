@@ -51,7 +51,7 @@ RUN  rm -f -r /usr/share/java/kafka-connect-* \
              /usr/share/java/rest-utils-* \
         && unset CONNECT_CLI
 
-# SETUP INIT 1
+# INSTALL DUMP INIT
 RUN wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64
 
 # COPY LOCAL FILES
@@ -62,9 +62,9 @@ COPY config.yaml /etc/jmx_exporter/config.yaml
 RUN chmod +x /usr/bin/dumb-init /opt/lenses/bin/entry-point
 
 ENV COMPONENT=kafka-connect
-ENV KAFKA_JMX_OPTS="-javaagent:/opt/jmx_exporter/jmx_prometheus_javaagent-0.7.jar=9103:/etc/jmx_exporter/config.yaml"
 
-# EXPOSE JMX PORT
+# CONFIGURE JMX AND EXPOSE JMX PORT
+ENV KAFKA_JMX_OPTS="-javaagent:/opt/jmx_exporter/jmx_prometheus_javaagent-0.7.jar=9103:/etc/jmx_exporter/config.yaml"
 EXPOSE 9103
 
 # DEFINE ENTRYPOINT
