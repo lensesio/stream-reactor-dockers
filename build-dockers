@@ -1,33 +1,48 @@
 #!/usr/bin/env bash
-TAG=$1
-SR_VERSION=$2
-CONFLUENT_VERSION=$3
-KAFKA_VERSION=$4
-LENSES_CLI_VERSION=$5
 
-if [[ -z "${TAG}" ]]; then
-    echo "No tag provided"
-    echo "Usage: ./build-dockers tag sr-version confluent-version kafka-version cli-version"
+set -e
+
+source build-versions
+
+TAG="${TAG:="${1}"}"
+SR_VERSION="${SR_VERSION:="${2}"}"
+CONFLUENT_VERSION="${CONFLUENT_VERSION:="${3}"}"
+KAFKA_VERSION="${KAFKA_VERSION:="${4}"}"
+CONNECT_CLI_VERSION="${CONNECT_CLI_VERSION:="${5}"}"
+
+function die() {
+    for m in "${@}"; do
+        echo -e "${m}"
+    done
     exit 1
-fi
+}
 
-if [[ -z "${CONFLUENT_VERSION}" ]]; then
-    echo "No confluent version provided"
-    echo "Usage: ./build-dockers tag sr-version confluent-version kafka-version cli-version"
-    exit 1
-fi
+declare -a ENV_ARRAY=(\
+    "TAG" "CONFLUENT_VERSION" \
+    "SECRET_PROVIDER_VERSION" \
+    "CONNECT_CLI_VERSION" \
+    "KAFKA_VERSION" \
+    "SR_VERSION"
+)
 
-if [[ -z "${KAFKA_VERSION}" ]]; then
-    echo "No Kafka version provided"
-    echo "Usage: ./build-dockers tag sr-version confluent-version kafka-version cli-version"
-    exit 1
-fi
+echo -e "\nChecking Environment"
+for e in "${ENV_ARRAY[@]}"; do
+    [[ -z "${!e}" ]] && die "\tEnv ${e} was not provided" \
+    "\tUsage: ./build-dockers tag sr-version confluent-version kafka-version cli-version"
 
-if [[ -z "${SR_VERSION}" ]]; then
-    echo "No Stream reactor version provided"
-    echo "Usage: ./build-dockers tag sr-version confluent-version kafka-version cli-version"
-    exit 1
-fi
+    echo -e "\tEnv ${e} has been set with: ${!e}"
+done
 
-./kafka-connect-base/build ${SR_VERSION} ${CONFLUENT_VERSION}
-./stream-reactor/build ${TAG} ${SR_VERSION} ${KAFKA_VERSION}
+echo -e "\nBuliding kafka-connect-base\n"
+
+./kafka-connect-base/build \
+    "${SR_VERSION}" \
+    "${CONFLUENT_VERSION}" \
+    "${SECRET_PROVIDER_VERSION}" \
+    "${CONNECT_CLI_VERSION}"
+
+./stream-reactor/build \
+    "${TAG}" \
+    "${SR_VERSION}" \
+    "${KAFKA_VERSION}"
+

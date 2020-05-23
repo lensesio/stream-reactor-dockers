@@ -4,31 +4,35 @@ set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 COMPONENT="kafka-connect"
-TAG=$1
-CONFLUENT_VERSION=$2
-LENSES_CLI_VERSION=$3
+TAG="${1}"
+CONFLUENT_VERSION="${2}"
+SECRET_PROVIDER_VERSION="${3}"
+CONNECT_CLI_VERSION="${4}"
+CALCITE_LINQ4J_VERSION="1.12.0"
 REPO=streamreactor
-export LENSES_CLI_VERSION
-export CONFLUENT_VERSION
 
-if [[ -z "${TAG}" ]]; then
-    echo "No tag provided"
+function die() {
+    for m in "${@}"; do
+        echo -e "${m}"
+    done
     exit 1
-fi
+}
 
-if [[ -z "${CONFLUENT_VERSION}" ]]; then
-    echo "No confluent version provided"
-    exit 1
-fi
+declare -a ENV_ARRAY=("TAG" "CONFLUENT_VERSION" \
+                      "SECRET_PROVIDER_VERSION" \
+                      "CONNECT_CLI_VERSION")
 
-if [[ -z "${LENSES_CLI_VERSION}" ]]; then
-    echo "No CLI version provided"
-    exit 1
-fi
+echo -e "\n\tChecking Environment"
+for e in "${ENV_ARRAY[@]}"; do
+    [[ -z "${!e}" ]] && die "\t\tEnv ${e} was not provided"
+    echo -e "\t\tEnv ${e} has been set with: ${!e}"
+done
 
-echo "Building base connect docker"
+echo -e "\n\tBuilding base connect docker\n"
 docker build \
-    --build-arg CONFLUENT_VERSION=${CONFLUENT_VERSION} \
+    --build-arg CONFLUENT_VERSION="${CONFLUENT_VERSION}" \
+    --build-arg SECRET_PROVIDER_VERSION="${SECRET_PROVIDER_VERSION}" \
+    --build-arg CONNECT_CLI_VERSION="${CONNECT_CLI_VERSION}" \
     -t ${REPO}/stream-reactor-base:${TAG} \
     -t ${REPO}/stream-reactor-base \
     -f ${DIR}/Dockerfile ${DIR}

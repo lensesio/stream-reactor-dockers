@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-TAG=$1
-STREAM_REACTOR_VERSION=$2
-KAFKA_VERSION=$3
+TAG="${1}"
+STREAM_REACTOR_VERSION="${2}"
+KAFKA_VERSION="${3}"
 REPO=streamreactor
 
 input="${DIR}/connectors.txt"

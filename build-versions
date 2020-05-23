@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export TAG="2.0"
+export SR_VERSION="2.0.0"
+export CONFLUENT_VERSION="5.4.0"
+export KAFKA_VERSION="2.4.0"
+export CONNECT_CLI_VERSION="1.0.9"
+export SECRET_PROVIDER_VERSION="0.0.2"
