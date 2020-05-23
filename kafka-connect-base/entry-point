@@ -17,6 +17,7 @@ fi
 # FUNCTION FOR CREATING THE CONNECTOR
 function push_config {
     # Wait until local connect's REST API comes up
+    # WAIT UNTIL LOCAL CONNECT'S REST API COMES UP
     until /opt/lenses/bin/connect-cli ps >>/dev/null
 
     do
@@ -26,7 +27,6 @@ function push_config {
 
     echo "Pushing connector config..."
     sleep 5
-    # cat $APP_PROPERTIES_FILE
 
     if [[ -n "${1}" && -f "${1}" ]]; then
         PROP_FILE="${1}"
@@ -41,21 +41,21 @@ function push_config {
 
 # FUNCTION FOR PROCESSING AND WRITING IDIVIDUAL VARIABLES TO CONNECTOR.PROPERTIES
 function process_variable {
-    # Set variables
+    # SET VARIABLES
     local var="${1}"
     local prefix="${2}"
     local config_file="${3}"
 
-    # Remove prefix from var name
+    # REMOVE PREFIX FROM VAR NAME
     conf="${var#${prefix}}"
 
-    # Convert var name to lowercase
+    # CONVERT VAR NAME TO LOWERCASE
     conf="$(echo ${conf,,} | tr _ .)"
 
-    # Option: key=val
+    # OPTION: KEY=VAL
     opt="${conf}=${!var}"
 
-    # Write to config file
+    # WRITE OPTION TO CONFIG FILE
     printf '%s\n' "${opt}" >> "${config_file}"
 }
 
@@ -98,14 +98,18 @@ fi
 push_config "/opt/lenses/connector.properties" &
 echo $! > /var/run/queue.pid > /var/run/pc.pid
 
-# SETUP CLASSPATH AND PLUGINS
+# SETUP CLASSPATH
 export CLASSPATH="${CLASSPATH}:/opt/lensesio/kafka-connect/plugins/*.jar"
 export CLASSPATH="${CLASSPATH}:/opt/calcite/*.jar"
 echo "CLASSPATH=${CLASSPATH}" > "/opt/lenses/.env"
 
+# EXPORT CLASSPATH TO ENV AND SETUP PLUGINS
 if ! grep -iq '\/opt\/lenses\/\.env' /etc/bash.bashrc; then
     echo "source /opt/lenses/.env" >> /etc/bash.bashrc
+
+    # CREATE SYMLINKS OF INSTALLED PLUGINS
     ln -sf /opt/lenses/kafka-connect/plugins/* /etc/kafka-connect/jars/
+    ln -sf /opt/calcite/* /etc/kafka-connect/jars/
 fi
 
 # START KAFKA CONNECT USING DUMP-INIT TO HANDLE SIGNALS
