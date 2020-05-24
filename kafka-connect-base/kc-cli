@@ -48,6 +48,7 @@ function get_help() {
   echo -e "\t-v\tView Kafka Connect logs"
   echo -e "\t-g\tDump to stdout Kafka Connect logs"
   echo -e "\t-o\tTail Kafka Connect logs"
+  echo -e "\t-lr\tRotate logs Kafka Connect logs"
 }
 
 function view_logs() {
@@ -78,6 +79,31 @@ function tail_logs {
   fi
 }
 
+function rotate_logs {
+  MaxLogsLines=50000
+  MaxLogRotates=3
+
+  while true; do
+    log_lines="$(wc -l runtime.log 2>&1 | cut -d ' ' -f1)"
+
+    if [[ "${log_lines}" -gt "${MaxLogsLines}" ]]; then
+      for i in $(seq $(( ${MaxLogRotates} - 1 )) -1 0); do
+        rt="$(( ${i} + 1 ))"
+
+        if [[ -e "runtime.log.${i}" && "${i}" != "0" && "${i}" != "${MaxLogRotates}" ]]; then
+          cp "runtime.log.${i}" "runtime.log.${rt}"
+          echo > "runtime.log.${i}"
+        elif [[ "${i}" == "0" ]]; then
+          cp "runtime.log" "runtime.log.1"
+          echo > "runtime.log"
+        fi
+      done
+    fi
+
+    sleep 15
+  done 
+}
+
 if [[ "${#}" == "0" ]]; then
   get_help
   exit 0
@@ -102,6 +128,8 @@ while (( "$#" )); do
       dump_logs;;
     "-o" )
       tail_logs;;
+    "-lr")
+      rotate_logs;;
    * )
      die "Invalid option: ${1}" \
      "For options issue: ./kc-cli -h"
