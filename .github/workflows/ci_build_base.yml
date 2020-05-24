@@ -15,6 +15,3 @@ jobs:
 
     - name: Build Base
       run: bash build-dockers - - - - - - - - - dev
-
-    - name: Build Connectors
-      run: bash build-dockers - - - - - - - - - -
