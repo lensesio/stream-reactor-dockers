@@ -26,6 +26,7 @@ function get_status() {
 }
 
 function init_kc() {
+  rr="$(realpath /proc/"${pid}"/exe)"
   if [[ ! -e "/proc/${pid}" && "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
 
     ( (/etc/confluent/docker/launch >/runtime.log 2>&1) & echo $! > /var/run/kc.pid &)
