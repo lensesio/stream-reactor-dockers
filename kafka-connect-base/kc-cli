@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export pid="$(cat /var/run/kc.pid 2>&1)"
+pid="$(cat /var/run/kc.pid 2>&1)"
+export pid
 
 function die() {
   for m in "${@}"; do
@@ -15,7 +16,7 @@ function get_status() {
     die "Kafka Connect is not running"
   fi
 
-  rr="$(realpath /proc/${pid}/exe)"
+  rr="$(realpath /proc/"${pid}"/exe)"
   if [[ "${rr}" == '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
     echo -e "Kafka Connect is running"
   fi
@@ -24,7 +25,7 @@ function get_status() {
 function init_kc() {
   if [[ ! -e "/proc/${pid}" && "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
 
-    ((/etc/confluent/docker/launch >/runtime.log 2>&1) & echo $! > /var/run/kc.pid &)
+    ( (/etc/confluent/docker/launch >/runtime.log 2>&1) & echo $! > /var/run/kc.pid &)
   
   else
     die "Kafka connect is already running"
@@ -87,8 +88,8 @@ function rotate_logs {
     log_lines="$(wc -l runtime.log 2>&1 | cut -d ' ' -f1)"
 
     if [[ "${log_lines}" -gt "${MaxLogsLines}" ]]; then
-      for i in $(seq $(( ${MaxLogRotates} - 1 )) -1 0); do
-        rt="$(( ${i} + 1 ))"
+      for i in $(seq $(( MaxLogRotates - 1 )) -1 0); do
+        rt="$(( i + 1 ))"
 
         if [[ -e "runtime.log.${i}" && "${i}" != "0" && "${i}" != "${MaxLogRotates}" ]]; then
           cp "runtime.log.${i}" "runtime.log.${rt}"
