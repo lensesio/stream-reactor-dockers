@@ -95,6 +95,8 @@ if [ ! -f /etc/kafka-connect/kafka-connect.properties ]; then
     exit 1
 fi
 
+# SPAWN PUSH CONFIG PROCESS. THIS PROCESS WILL RUN IN A LOOP UNTIL KAFKA CONNECT IS UP.
+# WHEN UP IT WILL CREATE THE CONNECTOR USING THE PARSED PROPERTIES
 push_config "/opt/lenses/connector.properties" &
 echo $! > /var/run/pc.pid
 
@@ -116,7 +118,10 @@ fi
 echo "Starting Connect worker"
 /opt/lenses/bin/kc-cli -i
 
+# START LOGROTATE
 (exec /opt/lenses/bin/kc-cli -lr &)
+
+# START TAILING THE LOG
 /opt/lenses/bin/kc-cli -o
 
 # EOF
