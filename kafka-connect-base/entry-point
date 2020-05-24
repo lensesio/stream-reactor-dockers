@@ -2,7 +2,7 @@
 
 set -e
 
-echo $$ > /var/run/queue.pid > /var/run/ep.pid
+echo $$ > /var/run/ep.pid
 
 # SETUP .BASHRC
 if ! grep -iq "KAFKA_CONNECT_REST" /root/.bashrc; then
