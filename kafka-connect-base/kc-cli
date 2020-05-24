@@ -3,6 +3,10 @@
 function get_pid() {
   if [[ -e /var/run/kc.pid ]]; then
     pid="$(cat /var/run/kc.pid 2>&1)"
+
+    if ! ps -p "${pid}" | grep -iq java; then
+      unset pid
+    fi
   else
     unset pid
   fi
