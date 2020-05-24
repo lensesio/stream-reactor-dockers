@@ -50,7 +50,7 @@ function process_variable {
     conf="${var#${prefix}}"
 
     # CONVERT VAR NAME TO LOWERCASE
-    conf="$(echo ${conf,,} | tr _ .)"
+    conf="$(echo "${conf,,}" | tr _ .)"
 
     # OPTION: KEY=VAL
     opt="${conf}=${!var}"
