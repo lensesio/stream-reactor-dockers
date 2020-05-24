@@ -96,7 +96,7 @@ if [ ! -f /etc/kafka-connect/kafka-connect.properties ]; then
 fi
 
 push_config "/opt/lenses/connector.properties" &
-echo $! > /var/run/queue.pid > /var/run/pc.pid
+echo $! > /var/run/pc.pid
 
 # SETUP CLASSPATH
 export CLASSPATH="${CLASSPATH}:/opt/lensesio/kafka-connect/plugins/*.jar"
