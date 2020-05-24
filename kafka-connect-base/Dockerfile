@@ -65,7 +65,7 @@ RUN chmod +x /usr/bin/dumb-init /opt/lenses/bin/entry-point
 ENV COMPONENT=kafka-connect
 
 # CONFIGURE JMX AND EXPOSE JMX PORT
-ENV KAFKA_JMX_OPTS="-javaagent:/opt/jmx_exporter/jmx_prometheus_javaagent-0.7.jar=9103:/etc/jmx_exporter/config.yaml"
+ENV KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9103 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
 EXPOSE 9103
 
 # DEFINE ENTRYPOINT
