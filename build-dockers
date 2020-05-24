@@ -41,6 +41,10 @@ echo -e "\nBuliding kafka-connect-base\n"
     "${SECRET_PROVIDER_VERSION}" \
     "${CONNECT_CLI_VERSION}"
 
+if [[ "${10}" == "dev" ]]; then
+    exit 0
+fi
+
 ./stream-reactor/build \
     "${TAG}" \
     "${SR_VERSION}" \
