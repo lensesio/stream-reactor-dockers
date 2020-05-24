@@ -19,6 +19,9 @@ function get_status() {
   rr="$(realpath /proc/"${pid}"/exe)"
   if [[ "${rr}" == '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
     echo -e "Kafka Connect is running"
+  else
+    die "Something went wrong. pid path ${rr} does not appear to be valid" \
+    "Please report this issue."
   fi
 }
 
@@ -26,7 +29,7 @@ function init_kc() {
   if [[ ! -e "/proc/${pid}" && "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
 
     ( (/etc/confluent/docker/launch >/runtime.log 2>&1) & echo $! > /var/run/kc.pid &)
-  
+
   else
     die "Kafka connect is already running"
   fi
@@ -125,7 +128,7 @@ while (( "$#" )); do
       restart_kc;;
     "-v" )
       view_logs;;
-    "-d" )
+    "-g" )
       dump_logs;;
     "-o" )
       tail_logs;;
