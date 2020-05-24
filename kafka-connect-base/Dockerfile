@@ -58,6 +58,7 @@ RUN wget -O /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/downlo
 COPY liveliness /opt/lenses/bin/liveliness
 COPY entry-point /opt/lenses/bin/entry-point
 COPY config.yaml /etc/jmx_exporter/config.yaml
+COPY kc-cli /opt/lenses/bin/kc-cli
 
 RUN chmod +x /usr/bin/dumb-init /opt/lenses/bin/entry-point
 

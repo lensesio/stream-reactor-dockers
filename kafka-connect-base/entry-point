@@ -10,7 +10,7 @@ if ! grep -iq "KAFKA_CONNECT_REST" /root/.bashrc; then
 	echo 'echo -e "\e[33mUse connect-cli ps to see deployed connectors\e[0m"' >> /root/.bashrc
     echo 'export KAFKA_CONNECT_REST="http://${CONNECT_REST_ADVERTISED_HOST_NAME}:${CONNECT_REST_PORT}"' \
         >> /root/.bashrc
-    echo 'echo -e "\e[35mTo manage the kafka-connect process. Use[0m e[34mkc-cli -h\e[0m"' >> /root/.bashrc
+    echo 'echo -e "\e[35mTo manage the kafka-connect process. Use \e[0m \e[34mkc-cli -h\e[0m"' >> /root/.bashrc
     echo 'export PATH="${PATH}:/opt/lenses/bin/"'  >> /root/.bashrc
 fi
 
@@ -114,6 +114,6 @@ fi
 
 # START KAFKA CONNECT USING DUMP-INIT TO HANDLE SIGNALS
 echo "Starting Connect worker"
-exec /etc/confluent/docker/launch >/runtime.log 2>&1
+/opt/lenses/bin/kc-cli -i
 
 # EOF
