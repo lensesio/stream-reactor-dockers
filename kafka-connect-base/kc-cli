@@ -55,7 +55,7 @@ function init_kc() {
     unset rr
   fi
 
-  if [[ -z "${rr}" && "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
+  if [[ "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
     sleep 5
 
     ( (/etc/confluent/docker/launch >/runtime.log 2>&1) & echo "${!}" > /var/run/kc.pid &)
