@@ -122,6 +122,14 @@ echo "Starting Connect worker"
 (exec /opt/lenses/bin/kc-cli -lr &)
 
 # START TAILING THE LOG
-/opt/lenses/bin/kc-cli -o
+while true; do
+    if [[ ! -e /runtime.log ]]; then
+        sleep 0.5
+        continue
+    fi
+
+    /opt/lenses/bin/kc-cli -o
+    break
+done
 
 # EOF

@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 
-pid="$(cat /var/run/kc.pid 2>&1)"
-export pid
+function get_pid() {
+  if [[ -e /var/run/kc.pid ]]; then
+    pid="$(cat /var/run/kc.pid 2>&1)"
+  else
+    pid=""
+  fi
+
+  export pid
+}
+
 
 function die() {
   for m in "${@}"; do
@@ -12,11 +20,18 @@ function die() {
 }
 
 function get_status() {
-  if [[ ! -e "/proc/${pid}" ]]; then
+  get_pid
+
+  if [[ -z "${pid}" ]]; then
     die "Kafka Connect is not running"
   fi
 
-  rr="$(realpath /proc/"${pid}"/exe)"
+  if [[ -n "${pid}" ]]; then
+    rr="$(realpath /proc/"${pid}"/exe 2>&1)"
+  else
+    rr=""
+  fi
+
   if [[ "${rr}" == '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
     echo -e "Kafka Connect is running"
   else
@@ -26,22 +41,42 @@ function get_status() {
 }
 
 function init_kc() {
-  rr="$(realpath /proc/"${pid}"/exe 2>&1)"
-  if [[ ! -e "/proc/${pid}" && "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
+  get_pid
 
-    ( (/etc/confluent/docker/launch >/runtime.log 2>&1) & echo $! > /var/run/kc.pid &)
+  echo "Starting Kafka Connect"
+
+  if [[ -n "${pid}" ]]; then
+    rr="$(realpath /proc/"${pid}"/exe 2>&1)"
+  else
+    rr=""
+  fi
+
+  if [[ -z "${rr}" && "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
+    sleep 5
+
+    ( (/etc/confluent/docker/launch >/runtime.log 2>&1) & echo "${!}" > /var/run/kc.pid &)
 
   else
-    die "Kafka connect is already running"
+    echo "Kafka connect is already running"
   fi
+
 }
 
 function kill_kc() {
-  kill -s TERM "${pid}"
+  get_pid
+
+  echo "Killing Kafka Connect process"
+  if [[ -n "${pid}" && -e "/proc/${pid}" ]]; then
+    kill -s TERM "${pid}"
+    rm -f /var/run/kc.pid
+    sleep 2
+  else
+    echo "Kafka connect is not running"
+  fi
 }
 
 function restart_kc() {
-  kill_kc && init_kc
+  kill_kc; init_kc
 }
 
 function get_help() {
