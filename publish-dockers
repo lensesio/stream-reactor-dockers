@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
+set -e
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-TAG=$1
-SR_VERSION=$2
-CONFLUENT_VERSION=$3
-KAFKA_VERSION=$4
+
+source build-versions
+
+TAG="${TAG:="${1}"}"
+SR_VERSION="${SR_VERSION:="${2}"}"
+CONFLUENT_VERSION="${CONFLUENT_VERSION:="${3}"}"
+KAFKA_VERSION="${KAFKA_VERSION:="${4}"}"
+CONNECT_CLI_VERSION="${CONNECT_CLI_VERSION:="${5}"}"
 REPO=streamreactor
 
-./build-dockers ${TAG} ${SR_VERSION} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}
+./build-dockers
 
 echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
 docker push ${REPO}/stream-reactor-base:${TAG}
