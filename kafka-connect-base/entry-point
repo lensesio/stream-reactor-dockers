@@ -115,5 +115,6 @@ fi
 # START KAFKA CONNECT USING DUMP-INIT TO HANDLE SIGNALS
 echo "Starting Connect worker"
 /opt/lenses/bin/kc-cli -i
+tail -f "/runtime.log"
 
 # EOF
