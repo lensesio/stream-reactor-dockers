@@ -4,7 +4,7 @@ function get_pid() {
   if [[ -e /var/run/kc.pid ]]; then
     pid="$(cat /var/run/kc.pid 2>&1)"
   else
-    pid=""
+    unset pid
   fi
 
   export pid
@@ -29,7 +29,7 @@ function get_status() {
   if [[ -n "${pid}" ]]; then
     rr="$(realpath /proc/"${pid}"/exe 2>&1)"
   else
-    rr=""
+    unset rr
   fi
 
   if [[ "${rr}" == '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
@@ -48,7 +48,7 @@ function init_kc() {
   if [[ -n "${pid}" ]]; then
     rr="$(realpath /proc/"${pid}"/exe 2>&1)"
   else
-    rr=""
+    unset rr
   fi
 
   if [[ -z "${rr}" && "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
