@@ -65,7 +65,7 @@ rm -f "/opt/lenses/connector.properties"
 printenv \
     | grep -E "^CONNECTOR_" \
     | sed -e 's/=.*//' \
-    | while read var
+    | while read -r var
 do
     process_variable "${var}" "CONNECTOR_" "/opt/lenses/connector.properties"
 done
