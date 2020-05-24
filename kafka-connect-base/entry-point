@@ -6,17 +6,17 @@ echo $$ > /var/run/ep.pid
 
 # SETUP .BASHRC
 if ! grep -iq "KAFKA_CONNECT_REST" /root/.bashrc; then
-    echo 'echo -e "\e[33mWelcome to StreamReactor\e[0m"' >> /root/.bashrc
-	echo 'echo -e "\e[33mUse connect-cli ps to see deployed connectors\e[0m"' >> /root/.bashrc
-    echo 'export KAFKA_CONNECT_REST="http://${CONNECT_REST_ADVERTISED_HOST_NAME}:${CONNECT_REST_PORT}"' \
-        >> /root/.bashrc
-    echo 'echo -e "\e[35mTo manage the kafka-connect process. Use \e[0m \e[34mkc-cli -h\e[0m"' >> /root/.bashrc
-    echo 'export PATH="${PATH}:/opt/lenses/bin/"'  >> /root/.bashrc
+    {
+        echo 'echo -e "\e[33mWelcome to StreamReactor\e[0m"'
+        echo 'echo -e "\e[33mUse connect-cli ps to see deployed connectors\e[0m"'
+        echo "export KAFKA_CONNECT_REST=http://${CONNECT_REST_ADVERTISED_HOST_NAME}:${CONNECT_REST_PORT}"
+        echo 'echo -e "\e[35mTo manage the kafka-connect process. Use \e[0m \e[34mkc-cli -h\e[0m"'
+        echo "export PATH=${PATH}:/opt/lenses/bin/"
+    } >> /root/.bashrc
 fi
 
 # FUNCTION FOR CREATING THE CONNECTOR
 function push_config {
-    # Wait until local connect's REST API comes up
     # WAIT UNTIL LOCAL CONNECT'S REST API COMES UP
     until /opt/lenses/bin/connect-cli ps >>/dev/null
 
@@ -76,7 +76,7 @@ if [[ -z "${CONNECT_PLUGIN_PATH}" ]]; then
 fi
 
 # INSTALL CONNECTOR TO CONNECT_PLUGIN_PATH IF A NEW PATH WAS PROVIDED
-if ! ls "${CONNECT_PLUGIN_PATH}" 2>/dev/null | grep -iq "${ARCHIVE%%".tar.gz"*}.jar"; then
+if [[ ! -e "${CONNECT_PLUGIN_PATH}/${ARCHIVE%%".tar.gz"*}.jar" ]] ; then
     if [[ ! -e "${CONNECT_PLUGIN_PATH}" ]]; then
         mkdir -p "${CONNECT_PLUGIN_PATH}"
     fi
@@ -117,6 +117,6 @@ echo "Starting Connect worker"
 /opt/lenses/bin/kc-cli -i
 
 (exec /opt/lenses/bin/kc-cli -lr &)
-tail -f "/runtime.log"
+/opt/lenses/bin/kc-cli -o
 
 # EOF
