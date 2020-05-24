@@ -1,6 +1,6 @@
 name: CI-BASE
 
-# on:
+on: [push]
   # push:
   #   branches: [ master ]
   # pull_request:
