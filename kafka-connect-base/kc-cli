@@ -121,6 +121,8 @@ function tail_logs {
   else
     die "No logs found for Kafka Connect"
   fi
+
+  exit 0
 }
 
 function rotate_logs {
