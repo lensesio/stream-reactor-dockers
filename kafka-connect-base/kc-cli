@@ -83,6 +83,14 @@ function restart_kc() {
   kill_kc; init_kc
 }
 
+function update_connector() {
+  if [[ -f "${1}" ]]; then
+    /opt/lenses/bin/entry-point "update" "${1}"
+  else
+    echo "Could not locate properties file"
+  fi
+}
+
 function get_help() {
   echo -e "Usage: ./kc-cli opts"
   echo -e "\t-s\tStatus of Kafka Connect"
@@ -92,7 +100,8 @@ function get_help() {
   echo -e "\t-v\tView Kafka Connect logs"
   echo -e "\t-g\tDump to stdout Kafka Connect logs"
   echo -e "\t-o\tTail Kafka Connect logs"
-  echo -e "\t-lr\tRotate logs Kafka Connect logs"
+  echo -e "\t-u\tUpdate Connector by providing connector.properties file as a second parameter"
+  echo -e "\t-lr\tRotate Kafka Connect logs\n"
 }
 
 function view_logs() {
@@ -174,6 +183,18 @@ while (( "$#" )); do
       dump_logs;;
     "-o" )
       tail_logs;;
+    "-u" )
+      shift 1
+      if [[ -z "${1}" ]]; then
+        die "No connector properties file was provided" \
+        "Usage: kc-cli -u /path/to/connector.porperties"
+      fi
+
+      if [[ ! -e "${1}" || ! -f "${1}" ]]; then
+        die "Error: ${1} either does not exist or is not a file"
+      fi
+
+      update_connector "${1}";;
     "-lr")
       rotate_logs;;
    * )

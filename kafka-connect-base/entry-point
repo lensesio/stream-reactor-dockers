@@ -39,6 +39,12 @@ function push_config {
     echo "done."
 }
 
+if [[ "${1}" == "update" && -n "${2}" ]]; then
+    push_config "${2}" &
+    echo $! > /var/run/pc.pid
+    exit 0
+fi
+
 # FUNCTION FOR PROCESSING AND WRITING IDIVIDUAL VARIABLES TO CONNECTOR.PROPERTIES
 function process_variable {
     # SET VARIABLES

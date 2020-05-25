@@ -18,9 +18,11 @@ function die() {
     exit 1
 }
 
-declare -a ENV_ARRAY=("TAG" "CONFLUENT_VERSION" \
-                      "SECRET_PROVIDER_VERSION" \
-                      "CONNECT_CLI_VERSION")
+declare -a ENV_ARRAY=(\
+    "TAG" "CONFLUENT_VERSION" \
+    "SECRET_PROVIDER_VERSION" \
+    "CONNECT_CLI_VERSION" \
+)
 
 echo -e "\n\tChecking Environment"
 for e in "${ENV_ARRAY[@]}"; do

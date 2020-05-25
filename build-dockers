@@ -22,7 +22,7 @@ declare -a ENV_ARRAY=(\
     "SECRET_PROVIDER_VERSION" \
     "CONNECT_CLI_VERSION" \
     "KAFKA_VERSION" \
-    "SR_VERSION"
+    "SR_VERSION" \
 )
 
 echo -e "\nChecking Environment"
