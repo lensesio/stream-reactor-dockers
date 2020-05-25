@@ -1,16 +1,12 @@
-ARG BASE_VERSION
-FROM streamreactor/stream-reactor-base:${BASE_VERSION}
-
 ARG STREAM_REACTOR_VERSION
-ARG STREAM_REACTOR_COMPONENT
-ARG KAFKA_VERSION
+FROM streamreactor/stream-reactor-base:${STREAM_REACTOR_VERSION}
 
-ENV STREAM_REACTOR_VERSION=${STREAM_REACTOR_VERSION}
-ENV STREAM_REACTOR_COMPONENT=${STREAM_REACTOR_COMPONENT}
-ENV KAFKA_VERSION=${KAFKA_VERSION}
-ENV ARCHIVE=kafka-connect-${STREAM_REACTOR_COMPONENT}-${STREAM_REACTOR_VERSION}-${KAFKA_VERSION}-all.tar.gz
-ENV URL=https://github.com/landoop/stream-reactor/releases/download
+ARG ARCHIVE
+ARG URL
 
-RUN wget ${URL}/${STREAM_REACTOR_VERSION}/${ARCHIVE} && tar -xf ${ARCHIVE} -C /opt/lenses/lib
+ENV ARCHIVE=${ARCHIVE}
+ENV URL=${URL}
+
+RUN wget ${URL} && tar -xf ${ARCHIVE} -C /opt/lenses/lib
 
 CMD ["dumb-init", "/opt/lenses/bin/entry-point"]

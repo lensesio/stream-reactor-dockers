@@ -1,44 +1,141 @@
 #!/usr/bin/env bash
 
+set -e
+
+echo $$ > /var/run/ep.pid
+
+# SETUP .BASHRC
+if ! grep -iq "KAFKA_CONNECT_REST" /root/.bashrc; then
+    {
+        echo 'echo -e "\e[33mWelcome to StreamReactor\e[0m"'
+        echo 'echo -e "\e[33mUse connect-cli ps to see deployed connectors\e[0m"'
+        echo "export KAFKA_CONNECT_REST=http://${CONNECT_REST_ADVERTISED_HOST_NAME}:${CONNECT_REST_PORT}"
+        echo 'echo -e "\e[35mTo manage the kafka-connect process. Use \e[0m \e[34mkc-cli -h\e[0m"'
+        echo "export PATH=${PATH}:/opt/lenses/bin/"
+    } >> /root/.bashrc
+fi
+
+# FUNCTION FOR CREATING THE CONNECTOR
 function push_config {
-    # wait until local connect's REST API comes up
+    # WAIT UNTIL LOCAL CONNECT'S REST API COMES UP
     until /opt/lenses/bin/connect-cli ps >>/dev/null
+
     do
-        echo "Waiting for connect's rest API at $KAFKA_CONNECT_REST"
+        echo "Waiting for connect's rest API at ${KAFKA_CONNECT_REST}"
         sleep 10
     done
+
     echo "Pushing connector config..."
     sleep 5
-    # cat $APP_PROPERTIES_FILE
-    /opt/lenses/bin/connect-cli run $CONNECTOR_NAME < $APP_PROPERTIES_FILE
+
+    if [[ -n "${1}" && -f "${1}" ]]; then
+        PROP_FILE="${1}"
+    else
+        echo "No connector's config was provided"
+        exit 1
+    fi
+
+    /opt/lenses/bin/connect-cli run "${CONNECTOR_NAME}" < "${PROP_FILE}"
     echo "done."
 }
 
-# cli expects this env var
-export KAFKA_CONNECT_REST="http://$CONNECT_REST_ADVERTISED_HOST_NAME:$CONNECT_REST_PORT"
-
-# use the cli to write the connect files if we don't have then in the shared mount
-if [ ! -f /etc/connect-share ]; then
-    echo "/etc/connect-share does not exist. Configuring from environment variables."
-    /opt/lenses/bin/configure
-else 
-    echo "Copying files from /etc/connect-share/ to /etc/kafka-connect"  
-    cp /etc/connect-share/connector.props /etc/kafka-connect/connector.properties
-    cp /etc/connect-share/secret.props /etc/kafka-connect/secrets.properties 
-    cp /etc/connect-share/worker.props /etc/kafka-connect/kafka-connect.properties 
+if [[ "${1}" == "update" && -n "${2}" ]]; then
+    push_config "${2}"
+    echo $! > /var/run/pc.pid
+    exit 0
 fi
 
-if [ ! -f /etc/kafka-connect/connector.properties ]; then
-    echo "Failed to find /etc/kafka-connect/connector.properties"
-    exit 1
-elif [ ! -f /etc/kafka-connect/kafka-connect.properties ]; then
+# FUNCTION FOR PROCESSING AND WRITING IDIVIDUAL VARIABLES TO CONNECTOR.PROPERTIES
+function process_variable {
+    # SET VARIABLES
+    local var="${1}"
+    local prefix="${2}"
+    local config_file="${3}"
+
+    # REMOVE PREFIX FROM VAR NAME
+    conf="${var#${prefix}}"
+
+    # CONVERT VAR NAME TO LOWERCASE
+    conf="$(echo "${conf,,}" | tr _ .)"
+
+    # OPTION: KEY=VAL
+    opt="${conf}=${!var}"
+
+    # WRITE OPTION TO CONFIG FILE
+    printf '%s\n' "${opt}" >> "${config_file}"
+}
+
+rm -f "/opt/lenses/connector.properties"
+
+# PARSE CONNECTOR OPTIONS FROM ENV
+printenv \
+    | grep -E "^CONNECTOR_" \
+    | sed -e 's/=.*//' \
+    | while read -r var
+do
+    process_variable "${var}" "CONNECTOR_" "/opt/lenses/connector.properties"
+done
+
+# CHECK IF PLUGINS PATH IS SET, SET TO /CONNECTORS OTHERWISE
+if [[ -z "${CONNECT_PLUGIN_PATH}" ]]; then
+    export CONNECT_PLUGIN_PATH="/opt/lenses/lib"
+fi
+
+# INSTALL CONNECTOR TO CONNECT_PLUGIN_PATH IF A NEW PATH WAS PROVIDED
+if [[ ! -e "${CONNECT_PLUGIN_PATH}/${ARCHIVE%%".tar.gz"*}.jar" ]] ; then
+    if [[ ! -e "${CONNECT_PLUGIN_PATH}" ]]; then
+        mkdir -p "${CONNECT_PLUGIN_PATH}"
+    fi
+
+    ln -sf /opt/lenses/lib/"${ARCHIVE%%".tar.gz"*}.jar" "${CONNECT_PLUGIN_PATH}/"
+fi
+
+# REQUIRED BY CONNECT-CLI TO CONNECT WITH KAFKA-CONNECT
+export KAFKA_CONNECT_REST="http://${CONNECT_REST_ADVERTISED_HOST_NAME}:${CONNECT_REST_PORT}"
+
+# CONFIGURE THE WORKER AND CONNECTOR PROP FILES
+/etc/confluent/docker/configure
+
+if [ ! -f /etc/kafka-connect/kafka-connect.properties ]; then
     echo "Failed to find /etc/kafka-connect/kafka-connect.properties"
     exit 1
 fi
 
-push_config &
+# SPAWN PUSH CONFIG PROCESS. THIS PROCESS WILL RUN IN A LOOP UNTIL KAFKA CONNECT IS UP.
+# WHEN UP IT WILL CREATE THE CONNECTOR USING THE PARSED PROPERTIES
+push_config "/opt/lenses/connector.properties" &
+echo $! > /var/run/pc.pid
 
-# start connect using dumb-init to handle signals
+# SETUP CLASSPATH
+export CLASSPATH="${CLASSPATH}:/opt/lensesio/kafka-connect/plugins/*.jar"
+export CLASSPATH="${CLASSPATH}:/opt/calcite/*.jar"
+echo "CLASSPATH=${CLASSPATH}" > "/opt/lenses/.env"
+
+# EXPORT CLASSPATH TO ENV AND SETUP PLUGINS
+if ! grep -iq '\/opt\/lenses\/\.env' /etc/bash.bashrc; then
+    echo "source /opt/lenses/.env" >> /etc/bash.bashrc
+
+    # CREATE SYMLINKS OF INSTALLED PLUGINS
+    ln -sf /opt/lenses/kafka-connect/plugins/* /etc/kafka-connect/jars/
+    ln -sf /opt/calcite/* /etc/kafka-connect/jars/
+fi
+
+# START KAFKA CONNECT USING DUMP-INIT TO HANDLE SIGNALS
 echo "Starting Connect worker"
-exec /etc/confluent/docker/launch
+/opt/lenses/bin/kc-cli -i
+
+# START LOGROTATE
+(exec /opt/lenses/bin/kc-cli -lr &)
+
+# START TAILING THE LOG
+while true; do
+    if [[ ! -e /runtime.log ]]; then
+        sleep 0.5
+        continue
+    fi
+
+    /opt/lenses/bin/kc-cli -o
+    break
+done
+
 # EOF

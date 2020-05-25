@@ -1,0 +1,22 @@
+name: Publish Dockers
+
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v1
+        - name: Get the tag
+          id: get_tag
+          run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        - name: Push the latest Docker image
+          env:
+             SR_VERSION: 2.0.0
+             CONFLUENT_VERSION: 5.4.0
+             KAFKA_VERSION: 2.4.0            
+             DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+             DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          run:  ./publish-dockers ${{ steps.get_tag.outputs.VERSION }} ${SR_VERSION} ${CONFLUENT_VERSION} ${KAFKA_VERSION} ${LENSES_CLI_VERSION}

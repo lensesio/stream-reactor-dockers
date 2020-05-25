@@ -1,0 +1,215 @@
+#!/usr/bin/env bash
+
+function get_pid() {
+  if [[ -e /var/run/kc.pid ]]; then
+    pid="$(cat /var/run/kc.pid 2>&1)"
+
+    if ! ps -p "${pid}" | grep -iq java; then
+      unset pid
+    fi
+  else
+    unset pid
+  fi
+
+  export pid
+}
+
+
+function die() {
+  for m in "${@}"; do
+    echo -e "${m}" 1>&2
+  done
+
+  exit 1
+}
+
+function get_status() {
+  get_pid
+
+  if [[ -z "${pid}" ]]; then
+    die "Kafka Connect is not running"
+  fi
+
+  if [[ -n "${pid}" ]]; then
+    rr="$(realpath /proc/"${pid}"/exe 2>&1)"
+  else
+    unset rr
+  fi
+
+  if [[ "${rr}" == '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
+    echo -e "Kafka Connect is running"
+  else
+    die "Something went wrong. pid path ${rr} does not appear to be valid" \
+    "Please report this issue."
+  fi
+}
+
+function init_kc() {
+  get_pid
+
+  echo "Starting Kafka Connect"
+
+  if [[ -n "${pid}" ]]; then
+    rr="$(realpath /proc/"${pid}"/exe 2>&1)"
+  else
+    unset rr
+  fi
+
+  if [[ "${rr}" != '/usr/lib/jvm/zulu-8-amd64/jre/bin/java' ]]; then
+    sleep 5
+
+    ( (/etc/confluent/docker/launch >/runtime.log 2>&1) & echo "${!}" > /var/run/kc.pid &)
+
+  else
+    echo "Kafka connect is already running"
+  fi
+
+}
+
+function kill_kc() {
+  get_pid
+
+  echo "Killing Kafka Connect process"
+  if [[ -n "${pid}" && -e "/proc/${pid}" ]]; then
+    kill -s TERM "${pid}"
+    rm -f /var/run/kc.pid
+    sleep 2
+  else
+    echo "Kafka connect is not running"
+  fi
+}
+
+function restart_kc() {
+  kill_kc; init_kc
+}
+
+function update_connector() {
+  if [[ -n "${1}" && -f "${2}" ]]; then
+    /opt/lenses/bin/connect-cli run "${1}" < "${2}"
+  else
+    echo "Could not locate properties file"
+  fi
+}
+
+function get_help() {
+  echo -e "Usage: ./kc-cli opts"
+  echo -e "\t-s\tStatus of Kafka Connect"
+  echo -e "\t-t\tTerminate Kafka Connect"
+  echo -e "\t-i\tInit Kafka Connect"
+  echo -e "\t-r\tRestart Kafka Connect"
+  echo -e "\t-v\tView Kafka Connect logs"
+  echo -e "\t-g\tDump to stdout Kafka Connect logs"
+  echo -e "\t-o\tTail Kafka Connect logs"
+  echo -e "\t-u\tUpdate Connector"
+  echo -e "\t-lr\tRotate Kafka Connect logs\n"
+}
+
+function view_logs() {
+  if [[ -e "/runtime.log" ]]; then
+    less /runtime.log
+  else
+    die "No logs to view. Is the process running?"
+  fi
+
+  exit 0
+}
+
+function dump_logs() {
+  if [[ -e "/runtime.log" ]]; then
+    cat /runtime.log
+  else
+    die "No logs found for Kafka Connect"
+  fi
+
+  exit 0
+}
+
+function tail_logs {
+  if [[ -e "/runtime.log" ]]; then
+    tail -f /runtime.log
+  else
+    die "No logs found for Kafka Connect"
+  fi
+
+  exit 0
+}
+
+function rotate_logs {
+  MaxLogsLines=50000
+  MaxLogRotates=3
+
+  while true; do
+    log_lines="$(wc -l runtime.log 2>&1 | cut -d ' ' -f1)"
+
+    if [[ "${log_lines}" -gt "${MaxLogsLines}" ]]; then
+      for i in $(seq $(( MaxLogRotates - 1 )) -1 0); do
+        rt="$(( i + 1 ))"
+
+        if [[ -e "runtime.log.${i}" && "${i}" != "0" && "${i}" != "${MaxLogRotates}" ]]; then
+          cp "runtime.log.${i}" "runtime.log.${rt}"
+          echo > "runtime.log.${i}"
+        elif [[ "${i}" == "0" ]]; then
+          cp "runtime.log" "runtime.log.1"
+          echo > "runtime.log"
+        fi
+      done
+    fi
+
+    sleep 15
+  done 
+}
+
+if [[ "${#}" == "0" ]]; then
+  get_help
+  exit 0
+fi
+
+while (( "$#" )); do
+  case ${1} in
+    "-h" )
+      get_help
+      exit 0;;
+    "-s" )
+      get_status;;
+    "-i" )
+      init_kc;;
+    "-t" )
+      kill_kc;;
+    "-r" )
+      restart_kc;;
+    "-v" )
+      view_logs;;
+    "-g" )
+      dump_logs;;
+    "-o" )
+      tail_logs;;
+    "-u" )
+      shift 1
+
+      if [[ -z "${1}" ]]; then
+        die "No name was provided for the connector." \
+        "Usage: kc-cli -u connactor_name /path/to/connector.porperties"
+      fi
+
+      cname="${1}"
+      shift 1
+
+      if [[ -z "${1}" ]]; then
+        die "No connector properties file was provided" \
+        "Usage: kc-cli -u connactor_name /path/to/connector.porperties"
+      fi
+
+      if [[ ! -e "${1}" || ! -f "${1}" ]]; then
+        die "Error: ${1} either does not exist or is not a file"
+      fi
+      cfile="${1}"
+      update_connector "${cname}" "${cfile}";;
+    "-lr")
+      rotate_logs;;
+   * )
+     die "Invalid option: ${1}" \
+     "For options issue: ./kc-cli -h"
+     ;;
+  esac
+  shift 1
+done

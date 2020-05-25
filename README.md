@@ -13,7 +13,7 @@ Environment variables prefixed with `CONNECTOR` are used to create a connector
 properties file. Environment variables beginning with `CONNECT` are used to
 create the properties file for the Kafka Connect Cluster. The Connector
 properties file is then pushed via DataMountaineers
-Connect [CLI](https://github.com/landoop/kafka-connect-tools) to the Connect
+Connect [CLI](https://github.com/lensesio/kafka-connect-tools) to the Connect
 workers API once it's up to start the connector.
 
 The expected use case is that the Connect Worker joins with other pods deployed
@@ -23,11 +23,6 @@ the environment variables.
 
 For an awesome deployment app to deploy your landscape checkout
 Eneco's [Landscaper](https://github.com/Eneco/landscaper).
-
-## Helm
-
-[Helm charts](https://github.com/landoop/kafka-helm-charts) are available for
-deployment into Kubernetes.
 
 For example:
 
@@ -53,15 +48,31 @@ docker run \
          -e CONNECTOR_TOPICS="topic_consumer_logs" \
          -e CONNECTOR_CONNECT_ELASTIC_URL="http://elastic_url" \
          -e CONNECTOR_CONNECT_ELASTIC_CLUSTER_NAME="elasticsearch" \
-         landoop/kafka-connect-elastic:1.2.1
+         lensesio/kafka-connect-elastic:1.2.1
 ```
+
+## Helm
+
+[Helm charts](https://github.com/lensesio/kafka-helm-charts) are available for
+deployment into Kubernetes.
 
 ## Secrets
 
 Secrets, .i.e. connections to data stores can be stored in external systems such
 as Hasihcorp Vault, Azure Keyvault or as retrieved from environment variables.
 
-The Lenses CLI is included in the base connect image. This will run and
+Since release 2.0.0 the dockers now support Config Providers for
+
+*   Azure KeyVault
+*   AWS Secret Manager
+*   Hashicorp Vault
+*   Environment variables - intended for use with kubernetes secrets
+
+See Lenses [Documentation](https://docs.lenses.io/connectors/secret-providers) for usage.
+
+**Pre 2.0.0**
+
+Pior releases use the Lenses CLI .The Lenses CLI is included in the base connect image. This will run and
 configure the Connect properties files. Setting the `SECRETS_PROVIDER` variable
 determines how to retrieve the values. Either `env`, `vault` or`azure`.
 
