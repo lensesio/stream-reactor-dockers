@@ -40,7 +40,7 @@ function push_config {
 }
 
 if [[ "${1}" == "update" && -n "${2}" ]]; then
-    push_config "${2}" &
+    push_config "${2}"
     echo $! > /var/run/pc.pid
     exit 0
 fi
