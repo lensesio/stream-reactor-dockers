@@ -85,7 +85,7 @@ function restart_kc() {
 
 function update_connector() {
   if [[ -f "${1}" ]]; then
-    /opt/lenses/bin/entry-point "update" "${1}"
+    /opt/lenses/bin/connect-cli run "${CONNECTOR_NAME}" < "${1}"
   else
     echo "Could not locate properties file"
   fi
