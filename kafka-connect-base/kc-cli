@@ -84,8 +84,8 @@ function restart_kc() {
 }
 
 function update_connector() {
-  if [[ -f "${1}" ]]; then
-    /opt/lenses/bin/connect-cli run "${CONNECTOR_NAME}" < "${1}"
+  if [[ -n "${1}" && -f "${2}" ]]; then
+    /opt/lenses/bin/connect-cli run "${1}" < "${2}"
   else
     echo "Could not locate properties file"
   fi
@@ -100,7 +100,7 @@ function get_help() {
   echo -e "\t-v\tView Kafka Connect logs"
   echo -e "\t-g\tDump to stdout Kafka Connect logs"
   echo -e "\t-o\tTail Kafka Connect logs"
-  echo -e "\t-u\tUpdate Connector by providing connector.properties file as a second parameter"
+  echo -e "\t-u\tUpdate Connector"
   echo -e "\t-lr\tRotate Kafka Connect logs\n"
 }
 
@@ -185,16 +185,25 @@ while (( "$#" )); do
       tail_logs;;
     "-u" )
       shift 1
+
+      if [[ -z "${1}" ]]; then
+        die "No name was provided for the connector." \
+        "Usage: kc-cli -u connactor_name /path/to/connector.porperties"
+      fi
+
+      cname="${1}"
+      shift 1
+
       if [[ -z "${1}" ]]; then
         die "No connector properties file was provided" \
-        "Usage: kc-cli -u /path/to/connector.porperties"
+        "Usage: kc-cli -u connactor_name /path/to/connector.porperties"
       fi
 
       if [[ ! -e "${1}" || ! -f "${1}" ]]; then
         die "Error: ${1} either does not exist or is not a file"
       fi
-
-      update_connector "${1}";;
+      cfile="${1}"
+      update_connector "${cname}" "${cfile}";;
     "-lr")
       rotate_logs;;
    * )
