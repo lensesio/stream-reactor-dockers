@@ -68,7 +68,7 @@ Since release 2.0.0 the dockers now support Config Providers for
 *   Hashicorp Vault
 *   Environment variables - intended for use with kubernetes secrets
 
-See Lenses [Documentation](https://docs.lenses.io/connectors/secret-providers) for usage.
+See Lenses [Documentation](https://docs.lenses.io/connectors/secret-providers.html) for usage.
 
 **Pre 2.0.0**
 
