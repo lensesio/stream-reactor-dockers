@@ -4,9 +4,6 @@ blockchain
 bloomberg
 cassandra
 coap
-druid
-elastic
-elastic5
 elastic6
 hazelcast
 hbase
