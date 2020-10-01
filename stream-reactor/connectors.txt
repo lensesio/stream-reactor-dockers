@@ -17,3 +17,4 @@ redis
 rethink
 voltdb
 pulsar
+aws-s3
