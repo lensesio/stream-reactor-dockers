@@ -1,0 +1,31 @@
+name: Continuous Delivery
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release:
+    name: 'Release'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Dockers
+      run: bash build-dockers
+
+    - name: Publish Dockers
+      run: |
+        echo ${{ secrets.DH_TOKEN }} | docker login --username  ${{ secrets.DH_USER }} --password-stdin
+        docker push "${REPO}"/stream-reactor-base:"${TAG}"
+        docker push "${REPO}"/stream-reactor-base
+
+        input="stream-reactor/connectors.txt"
+
+        while IFS= read -r STREAM_REACTOR_COMPONENT
+        do
+            echo "Publishing ${STREAM_REACTOR_COMPONENT} connector version ${TAG}"
+            docker push "${REPO}/${STREAM_REACTOR_COMPONENT}:${TAG}"
+            docker push "${REPO}/${STREAM_REACTOR_COMPONENT}"
+        done < "${input}"

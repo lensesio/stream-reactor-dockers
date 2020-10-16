@@ -15,15 +15,15 @@ REPO=streamreactor
 
 ./build-dockers
 
-echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USERNAME} --password-stdin
-docker push ${REPO}/stream-reactor-base:${TAG}
-docker push ${REPO}/stream-reactor-base
+echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USERNAME}" --password-stdin
+docker push "${REPO}"/stream-reactor-base:"${TAG}"
+docker push "${REPO}"/stream-reactor-base
 
 input="stream-reactor/connectors.txt"
 
 while IFS= read -r STREAM_REACTOR_COMPONENT
 do
     echo "Publishing ${STREAM_REACTOR_COMPONENT} connector version ${TAG}"
-    docker push ${REPO}/${STREAM_REACTOR_COMPONENT}:${TAG}
-    docker push ${REPO}/${STREAM_REACTOR_COMPONENT}
-done < "$input"
+    docker push "${REPO}/${STREAM_REACTOR_COMPONENT}:${TAG}"
+    docker push "${REPO}/${STREAM_REACTOR_COMPONENT}"
+done < "${input}"
