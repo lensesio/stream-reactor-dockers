@@ -72,7 +72,7 @@ See Lenses [Documentation](https://docs.lenses.io/connectors/secret-providers.ht
 
 **Pre 2.0.0**
 
-Pior releases use the Lenses CLI .The Lenses CLI is included in the base connect image. This will run and
+Prior releases use the Lenses CLI .The Lenses CLI is included in the base connect image. This will run and
 configure the Connect properties files. Setting the `SECRETS_PROVIDER` variable
 determines how to retrieve the values. Either `env`, `vault` or`azure`.
 
